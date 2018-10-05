@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { dbService } from '../services/db.service';
 import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 import { FormControl } from '@angular/forms';
-import { BehaviorSubject } from 'rxjs/index';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-users',
@@ -35,6 +35,7 @@ export class UsersComponent implements OnInit {
 
   public getUsers(): void {
     this.dbApi.getAllClients().subscribe((response) => {
+      response.forEach((customer, index) => response[index].birthDate = moment(customer.birthDate).format('DD.MM.YYYY'));
       this.dataSource = new MatTableDataSource(response);
       this.allCustomers = this.displayedCustomers = response;
       this.dataSource.paginator = this.paginator;

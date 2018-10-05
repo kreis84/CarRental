@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import * as moment from 'moment';
 import { dbService } from '../../services/db.service';
@@ -9,8 +9,8 @@ import { dbService } from '../../services/db.service';
   styleUrls: ['./add-customer.component.scss']
 })
 export class AddCustomerComponent implements OnInit {
-  @Output()
-  onAddNewCustomerBack: EventEmitter<any> = new EventEmitter<any>();
+  @Input() customer: any;
+  @Output() onAddNewCustomerBack: EventEmitter<any> = new EventEmitter<any>();
 
   customerGroup: FormGroup = new FormGroup({
       name: new FormControl('', Validators.required),
@@ -26,12 +26,22 @@ export class AddCustomerComponent implements OnInit {
   }
 
   ngOnInit() {
+    if(this.customer){
+      this.initExsitingCustomer();
+    }
     this.customerGroup.valueChanges.subscribe((val) => this.customerGroup);
   }
 
   public onSaveNewCustomer(): void {
-    const customer = this.customerGroup.getRawValue;
-    this.dbApi.putNewCustopmer(customer);
+    const customer = this.customerGroup.getRawValue()
+    customer.birthDate = moment(customer.birthDate).format('DD.MM.YYYY');
+    console.log(customer);
+    this.dbApi.putNewCustopmer(customer).subscribe((res) => this.onAddNewCustomerBack.emit(),
+      (error) => console.log(error));
+  }
+
+  public initExsitingCustomer(): void {
+
   }
 
   public onCancel(): void {

@@ -24,7 +24,7 @@ export class dbService {
     return this.http.get(`https://carrental-027b.restdb.io/rest/cars`, this.httpOptions);
   }
   public putNewCustopmer(customer: any): any{
-    this.http.put('https://carrental-027b.restdb.io/rest/cars', customer, this.httpOptions);
+    return this.http.post('https://carrental-027b.restdb.io/rest/clients', customer, this.httpOptions);
   }
 
 }
