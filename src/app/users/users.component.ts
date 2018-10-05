@@ -28,6 +28,7 @@ export class UsersComponent implements OnInit {
   }
 
   ngOnInit() {
+    console.log('worka');
     this.getUsers();
     this.filterInput.valueChanges.subscribe(this.filterCustomers.bind(this));
   }
@@ -77,5 +78,6 @@ export class UsersComponent implements OnInit {
   public onAddNewCustomerClose(): void {
     this.showAddNewCustomer = false;
     this.showAllCustomers = true;
+    this.ngOnInit();
   }
 }

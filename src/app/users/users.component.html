@@ -1,4 +1,4 @@
-<div [ngClass]="{'show': showAllCustomers, 'hide': !showAllCustomers}">
+<div *ngIf="showAllCustomers">
   <mat-card>
     <div fxLayout="row" fxLayoutAlign="space-between center">
       <mat-form-field>
@@ -83,7 +83,7 @@
   </mat-paginator>
 </div>
 
-<add-customer *ngIf="showAddNewCustomer"
+<add-customer *ngIf='showAddNewCustomer'
               (onAddNewCustomerBack)="onAddNewCustomerClose()">
 </add-customer>
 

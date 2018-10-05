@@ -1,6 +1,7 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import * as moment from 'moment';
+import { dbService } from '../../services/db.service';
 
 @Component({
   selector: 'add-customer',
@@ -9,7 +10,7 @@ import * as moment from 'moment';
 })
 export class AddCustomerComponent implements OnInit {
   @Output()
-  onAddNewCustomerBack: EventEmitter = new EventEmitter(null);
+  onAddNewCustomerBack: EventEmitter<any> = new EventEmitter<any>();
 
   customerGroup: FormGroup = new FormGroup({
       name: new FormControl('', Validators.required),
@@ -21,7 +22,7 @@ export class AddCustomerComponent implements OnInit {
     });
 
 
-  constructor() {
+  constructor(private dbApi: dbService) {
   }
 
   ngOnInit() {
@@ -29,7 +30,8 @@ export class AddCustomerComponent implements OnInit {
   }
 
   public onSaveNewCustomer(): void {
-
+    const customer = this.customerGroup.getRawValue;
+    this.dbApi.putNewCustopmer(customer);
   }
 
   public onCancel(): void {
