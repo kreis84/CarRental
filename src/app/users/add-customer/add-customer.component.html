@@ -17,9 +17,9 @@
     </mat-form-field>
     <mat-form-field fxFlex="30%">
       <input matInput formControlName="pesel" placeholder="Pesel" required maxlength="11">
-      <mat-hint align="end">{{customerGroup.get('pesel').value.toString().length}} / 11</mat-hint>
+      <mat-hint align="end">{{getPropLength('pesel')}} / 11</mat-hint>
       <mat-error *ngIf="!customerGroup.get('pesel').valid" align="end">
-        Pesel is required and must have 11 numeric characters. Actual length: {{customerGroup.get('pesel').value.toString().length}}
+        Pesel is required and must have 11 numeric characters. Actual length: {{getPropLength('pesel')}}
       </mat-error>
     </mat-form-field>
     <mat-form-field fxFlex="30%">

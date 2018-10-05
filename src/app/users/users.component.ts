@@ -24,6 +24,8 @@ export class UsersComponent implements OnInit {
   showAddNewCustomer: boolean = false;
   showAllCustomers: boolean = true;
 
+  customerToEdit = null;
+
   constructor(private dbApi: dbService) {
   }
 
@@ -60,7 +62,8 @@ export class UsersComponent implements OnInit {
   }
 
   public onEditCusomer(customer): void {
-    console.log(customer);
+    this.customerToEdit = customer;
+    this.onShowAddNewCustomer();
   }
 
   public onShowHistory(customer): void {
@@ -80,5 +83,6 @@ export class UsersComponent implements OnInit {
     this.showAddNewCustomer = false;
     this.showAllCustomers = true;
     this.ngOnInit();
+    this.customerToEdit = null;
   }
 }

@@ -20,11 +20,17 @@ export class dbService {
   public getAllClients(): any {
     return this.http.get(`https://carrental-027b.restdb.io/rest/clients`, this.httpOptions);
   }
+
   public getAllCars(): any {
     return this.http.get(`https://carrental-027b.restdb.io/rest/cars`, this.httpOptions);
   }
-  public putNewCustopmer(customer: any): any{
+
+  public addNewCustomer(customer: any): any{
     return this.http.post('https://carrental-027b.restdb.io/rest/clients', customer, this.httpOptions);
+  }
+
+  public updateCustomer(customer: any, id: string): any{
+    return this.http.put(`https://carrental-027b.restdb.io/rest/clients/${id}`, customer, this.httpOptions);
   }
 
 }

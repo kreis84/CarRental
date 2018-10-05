@@ -84,6 +84,7 @@
 </div>
 
 <add-customer *ngIf='showAddNewCustomer'
+              [customer]="customerToEdit"
               (onAddNewCustomerBack)="onAddNewCustomerClose()">
 </add-customer>
 
