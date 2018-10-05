@@ -1,0 +1,61 @@
+<mat-card>
+  <div [formGroup]="customerGroup" fxLayout="row layout-wrap">
+    <mat-form-field fxFlex="30%">
+      <input matInput formControlName="name" placeholder="Name" required>
+      <mat-error align="end" *ngIf="!customerGroup.get('name').valid">
+        This field is required
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field fxFlex="30%">
+      <input matInput formControlName="lastName" placeholder="Last Name" required>
+      <mat-error align="end" *ngIf="!customerGroup.get('lastName').valid">
+        This field is required
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field fxFlex="30%">
+      <input matInput formControlName="phone" placeholder="Phone number">
+    </mat-form-field>
+    <mat-form-field fxFlex="30%">
+      <input matInput formControlName="pesel" placeholder="Pesel" required maxlength="11">
+      <mat-hint align="end">{{customerGroup.get('pesel').value.toString().length}} / 11</mat-hint>
+      <mat-error *ngIf="!customerGroup.get('pesel').valid" align="end">
+        Pesel is required and must have 11 numeric characters. Actual length: {{customerGroup.get('pesel').value.toString().length}}
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field fxFlex="30%">
+      <input matInput formControlName="address" placeholder="Address" required>
+      <mat-error align="end" *ngIf="!customerGroup.get('address').valid">
+        This field is required
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field fxFlex="30%">
+      <input matInput [matDatepicker]="picker"
+             (click)="picker.open()"
+             (focus)="picker.open()"
+             placeholder="Date of Birth"
+             formControlName="birthDate">
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
+  </div>
+</mat-card>
+<mat-card fxLayout="row" fxLayoutAlign="end">
+  <button mat-raised-button
+          color="accent"
+          matTooltipPosition="above"
+          (click)="onCancel()"
+          matTooltip="Back to customer list">
+    <i class="fas fa-backspace"></i>
+    &nbsp;&nbsp;Cancel
+  </button>
+
+  <button mat-raised-button
+          color="warn"
+          matTooltipPosition="above"
+          [disabled]="!customerGroup.valid"
+          (click)="onSaveNewCustomer()"
+          matTooltip="Save customer">
+    <i class="far fa-save"></i>
+    &nbsp;&nbsp; Save new customer
+  </button>
+</mat-card>

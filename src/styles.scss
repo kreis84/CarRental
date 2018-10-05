@@ -1,6 +1,21 @@
 /* You can add global styles to this file, and also import other style files */
-@import "theme.scss";
+@import 'src/theme.scss';
+
 
 *{
   font-family: Calibri;
+}
+
+table{
+  width: 100%;
+  cursor: pointer;
+}
+
+::ng-deep .mat-sort-header-container {
+  display:flex;
+  justify-content:center;
+}
+
+.mat-tooltip {
+  font-size: 13px !important;
 }

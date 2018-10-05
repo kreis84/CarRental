@@ -1,0 +1,28 @@
+#browserWindow{
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: space-around;
+}
+
+::ng-deep .mat-tab-label-content {
+  font-size: 25px!important;
+}
+
+@media (max-width: 1200px){
+  #mainWindow{
+    flex-basis: 100%;
+  }
+}
+
+@media (min-width: 1200px) and (max-width: 1600px){
+  #mainWindow{
+    flex-basis: 90%;
+  }
+}
+
+@media (min-width: 1600px){
+  #mainWindow{
+    flex-basis: 80%;
+  }
+}
