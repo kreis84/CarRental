@@ -20,6 +20,7 @@ import { MomentModule } from 'angular2-moment';
 import { ReactiveFormsModule } from '@angular/forms';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { AddCustomerComponent } from './users/add-customer/add-customer.component';
+import { LoaderService } from './services/loader.service';
 
 @NgModule({
   declarations: [
@@ -76,7 +77,7 @@ import { AddCustomerComponent } from './users/add-customer/add-customer.componen
     MatDatepickerModule,
     MatNativeDateModule
   ],
-  providers: [HttpClient, {provide: MAT_DATE_LOCALE, useValue: 'en-GB'}],
+  providers: [HttpClient, {provide: MAT_DATE_LOCALE, useValue: 'en-GB'}, LoaderService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

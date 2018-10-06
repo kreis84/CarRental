@@ -1,10 +1,17 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { LoaderService } from './services/loader.service';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+  styleUrls: ['./app.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class AppComponent {
-  title = 'app';
+export class AppComponent implements OnInit{
+  showLoader:boolean = true;
+
+  constructor(public loaderApi: LoaderService){}
+  ngOnInit(){
+    this.loaderApi.status.subscribe((value) => this.showLoader = value);
+  }
 }

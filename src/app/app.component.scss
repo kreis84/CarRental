@@ -1,4 +1,4 @@
-#browserWindow{
+#browserWindow {
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
@@ -6,23 +6,36 @@
 }
 
 ::ng-deep .mat-tab-label-content {
-  font-size: 25px!important;
+  font-size: 25px !important;
 }
 
-@media (max-width: 1200px){
-  #mainWindow{
+#loaderScreen {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  z-index: 100;
+  background-color: rgba(0,0,0, 0.6);
+  mat-spinner {
+    margin: auto;
+    width: 50%;
+    top: 40%
+  }
+}
+
+@media (max-width: 1200px) {
+  #mainWindow {
     flex-basis: 100%;
   }
 }
 
-@media (min-width: 1200px) and (max-width: 1600px){
-  #mainWindow{
+@media (min-width: 1200px) and (max-width: 1600px) {
+  #mainWindow {
     flex-basis: 90%;
   }
 }
 
-@media (min-width: 1600px){
-  #mainWindow{
+@media (min-width: 1600px) {
+  #mainWindow {
     flex-basis: 80%;
   }
 }

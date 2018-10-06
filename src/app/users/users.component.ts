@@ -3,6 +3,7 @@ import { dbService } from '../services/db.service';
 import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 import { FormControl } from '@angular/forms';
 import * as moment from 'moment';
+import { LoaderService } from '../services/loader.service';
 
 @Component({
   selector: 'app-users',
@@ -26,7 +27,8 @@ export class UsersComponent implements OnInit {
 
   customerToEdit = null;
 
-  constructor(private dbApi: dbService) {
+  constructor(private dbApi: dbService,
+              private loaderApi: LoaderService) {
   }
 
   ngOnInit() {
@@ -36,11 +38,15 @@ export class UsersComponent implements OnInit {
   }
 
   public getUsers(): void {
+    this.loaderApi.turnOn();
     this.dbApi.getAllClients().subscribe((response) => {
       this.dataSource = new MatTableDataSource(response);
       this.allCustomers = this.displayedCustomers = response;
       this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sort;
+      this.loaderApi.turnOff();
+    }, (error) => {
+      this.loaderApi.turnOff();
     });
   }
 
