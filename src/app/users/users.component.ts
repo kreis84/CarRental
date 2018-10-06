@@ -37,7 +37,6 @@ export class UsersComponent implements OnInit {
 
   public getUsers(): void {
     this.dbApi.getAllClients().subscribe((response) => {
-      response.forEach((customer, index) => response[index].birthDate = moment(customer.birthDate).format('DD.MM.YYYY'));
       this.dataSource = new MatTableDataSource(response);
       this.allCustomers = this.displayedCustomers = response;
       this.dataSource.paginator = this.paginator;

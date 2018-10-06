@@ -34,7 +34,8 @@ export class AddCustomerComponent implements OnInit {
 
   public onSaveNewCustomer(): void {
     const customer = this.customerGroup.getRawValue();
-    customer.birthDate = moment(customer.birthDate).format('DD.MM.YYYY');
+    customer.birthDate = moment(customer.birthDate).format('DD.MM.YYYY').toString();
+    console.log(customer.birthDate);
     const service = this.customer
       ? this.dbApi.updateCustomer(customer, this.customer._id)
       : this.dbApi.addNewCustomer(customer);
@@ -48,7 +49,9 @@ export class AddCustomerComponent implements OnInit {
     this.customerGroup.get('pesel').patchValue(this.customer.pesel);
     this.customerGroup.get('address').patchValue(this.customer.address);
     this.customerGroup.get('phone').patchValue(this.customer.phone);
-    this.customerGroup.get('birthDate').patchValue(this.customer.birthDate);
+    if (this.customer.birthDate) {
+      this.customerGroup.get('birthDate').patchValue(new Date(moment(this.customer.birthDate, 'DD.MM.YYYY').toString()));
+    }
   }
 
   public onCancel(): void {

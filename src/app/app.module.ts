@@ -4,6 +4,7 @@ import { NgModule } from '@angular/core';
 import { AppComponent } from './app.component';
 import { UsersComponent } from './users/users.component';
 import {
+  MAT_DATE_LOCALE,
   MatButtonModule, MatButtonToggleModule,
   MatCardModule, MatDatepickerModule, MatDivider,
   MatDividerModule, MatFormFieldModule, MatGridListModule, MatIconModule, MatInputModule, MatNativeDateModule,
@@ -75,7 +76,7 @@ import { AddCustomerComponent } from './users/add-customer/add-customer.componen
     MatDatepickerModule,
     MatNativeDateModule
   ],
-  providers: [HttpClient],
+  providers: [HttpClient, {provide: MAT_DATE_LOCALE, useValue: 'en-GB'}],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
