@@ -14,6 +14,9 @@
     </mat-form-field>
     <mat-form-field fxFlex="30%">
       <input matInput formControlName="phone" placeholder="Phone number">
+      <mat-error align="end" *ngIf="!customerGroup.get('phone').valid">
+        Only numeric characters
+      </mat-error>
     </mat-form-field>
     <mat-form-field fxFlex="30%">
       <input matInput formControlName="pesel" placeholder="Pesel" required maxlength="11">

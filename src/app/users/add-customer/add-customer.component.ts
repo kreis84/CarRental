@@ -18,7 +18,7 @@ export class AddCustomerComponent implements OnInit {
     pesel: new FormControl('', [Validators.required, Validators.pattern(/^-?(0|[1-9]{11}\d*)?$/)]),
     address: new FormControl('', Validators.required),
     birthDate: new FormControl(''),
-    phone: new FormControl('')
+    phone: new FormControl('', [Validators.pattern(/^-?(0|[1-9]\d*)?$/)])
   });
 
 
@@ -29,7 +29,7 @@ export class AddCustomerComponent implements OnInit {
     if (this.customer) {
       this.initExsitingCustomer();
     }
-    this.customerGroup.valueChanges.subscribe((val) => this.customerGroup);
+    this.customerGroup.valueChanges.subscribe((val) => console.log(this.customerGroup));
   }
 
   public onSaveNewCustomer(): void {
