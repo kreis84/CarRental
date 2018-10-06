@@ -31,7 +31,7 @@ export class UsersComponent implements OnInit {
 
   constructor(private dbApi: dbService,
               private loaderApi: LoaderService,
-              private dialog: MatDialog) {
+              private dialogApi: MatDialog) {
   }
 
   ngOnInit() {
@@ -47,6 +47,7 @@ export class UsersComponent implements OnInit {
       this.allCustomers = this.displayedCustomers = response;
       this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sort;
+      this.filterInput.patchValue('');
       this.loaderApi.turnOff();
     }, (error) => {
       this.loaderApi.turnOff();
@@ -79,7 +80,7 @@ export class UsersComponent implements OnInit {
   }
 
   public onRemoveCustomer(customer): void {
-    this.dialog.open(DialogComponent, {width: '250px', data: {type: MSG_TYPES.WARN, buttonType: BUTTON_TYPE.OK_CANCEL, message: 'Are you sure you want to delete customer?'}})
+    this.dialogApi.open(DialogComponent, {width: '250px', data: {type: MSG_TYPES.WARN, buttonType: BUTTON_TYPE.OK_CANCEL, message: 'Are you sure you want to delete customer?'}})
       .afterClosed().subscribe((response) => {
         if(response === 'cancel'){
           return;
@@ -87,6 +88,7 @@ export class UsersComponent implements OnInit {
           this.loaderApi.turnOn();
           this.dbApi.removeCustomer(customer._id).subscribe(() => {
             this.getUsers();
+            this.dialogApi.open(DialogComponent, {width: '250px', data: {type: MSG_TYPES.INFO, buttonType: BUTTON_TYPE.OK, message: 'Customer successfuly removed.'}})
           }, (error) => {
             console.log(error);
             this.loaderApi.turnOff();

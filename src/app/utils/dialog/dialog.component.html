@@ -2,7 +2,7 @@
 <h2 *ngIf="data.type === 1" style="background-color: red">ERROR</h2>
 <h2 *ngIf="data.type === 2" style="background-color: steelblue">INFO</h2>
 <!--<mat-divider></mat-divider>-->
-<div>{{data.message}}</div>
+<div id="message">{{data.message}}</div>
 <!--<mat-divider></mat-divider>-->
 <div fxLayout="row" fxLayoutAlign="space-between" class="buttonWrapper">
   <button mat-raised-button color="accent" (click)="onClose('cancel')" *ngIf="data.buttonType === 1">
@@ -11,7 +11,7 @@
   <button mat-raised-button color="warn" (click)="onClose('ok')" *ngIf="data.buttonType === 1">
     <i class="fas fa-check"></i>&nbsp;&nbsp;OK
   </button>
-  <button mat-raised-button color="accent" (click)="onClose('ok')" *ngIf="data.buttonType === 0">
+  <button mat-raised-button color="accent" (click)="onClose('ok')" *ngIf="data.buttonType === 0" style="width: 100%">
     <i class="fas fa-check"></i>&nbsp;&nbsp;OK
   </button>
 </div>

@@ -2,6 +2,10 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import * as moment from 'moment';
 import { dbService } from '../../services/db.service';
+import { LoaderService } from '../../services/loader.service';
+import { MatDialog } from '@angular/material';
+import { BUTTON_TYPE, MSG_TYPES } from '../../utils/utils';
+import { DialogComponent } from '../../utils/dialog/dialog.component';
 
 @Component({
   selector: 'add-customer',
@@ -22,24 +26,33 @@ export class AddCustomerComponent implements OnInit {
   });
 
 
-  constructor(private dbApi: dbService) {
+  constructor(private dbApi: dbService,
+              private loaderApi: LoaderService,
+              private dialogApi: MatDialog) {
   }
 
   ngOnInit() {
     if (this.customer) {
       this.initExsitingCustomer();
     }
-    // this.customerGroup.valueChanges.subscribe((val) => console.log(this.customerGroup));
+    this.customerGroup.valueChanges.subscribe((val) => console.log(this.customerGroup));
   }
 
   public onSaveNewCustomer(): void {
     const customer = this.customerGroup.getRawValue();
+    if(customer.birthDate !== null && customer.birthDate !== undefined && customer.birthDate !== '')
     customer.birthDate = moment(customer.birthDate).format('DD.MM.YYYY').toString();
     const service = this.customer
       ? this.dbApi.updateCustomer(customer, this.customer._id)
       : this.dbApi.addNewCustomer(customer);
-    service.subscribe((res) => this.onAddNewCustomerBack.emit(),
-      (error) => console.log(error));
+    this.loaderApi.turnOn();
+    service.subscribe((res) => {
+        this.onAddNewCustomerBack.emit();
+        this.dialogApi.open(DialogComponent, {width: '250px', data: {type: MSG_TYPES.INFO, buttonType: BUTTON_TYPE.OK, message: 'Customer successfuly added.'}});
+      },
+      (error) => {
+        this.dialogApi.open(DialogComponent, {width: '250px', data: {type: MSG_TYPES.ERROR, buttonType: BUTTON_TYPE.OK, message: error.message}});
+      });
   }
 
   public initExsitingCustomer(): void {
@@ -48,8 +61,11 @@ export class AddCustomerComponent implements OnInit {
     this.customerGroup.get('pesel').patchValue(this.customer.pesel);
     this.customerGroup.get('address').patchValue(this.customer.address);
     this.customerGroup.get('phone').patchValue(this.customer.phone);
+    console.log(this.customer);
     if (this.customer.birthDate) {
       this.customerGroup.get('birthDate').patchValue(new Date(moment(this.customer.birthDate, 'DD.MM.YYYY').toString()));
+    } else {
+      this.customerGroup.get('birthDate').patchValue('');
     }
   }
 
