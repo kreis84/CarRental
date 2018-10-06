@@ -4,9 +4,9 @@ import { NgModule } from '@angular/core';
 import { AppComponent } from './app.component';
 import { UsersComponent } from './users/users.component';
 import {
-  MAT_DATE_LOCALE,
+  MAT_DATE_LOCALE, MAT_DIALOG_DEFAULT_OPTIONS,
   MatButtonModule, MatButtonToggleModule,
-  MatCardModule, MatDatepickerModule, MatDivider,
+  MatCardModule, MatDatepickerModule, MatDialogModule, MatDivider,
   MatDividerModule, MatFormFieldModule, MatGridListModule, MatIconModule, MatInputModule, MatNativeDateModule,
   MatPaginatorModule, MatProgressSpinnerModule,
   MatSortModule, MatSpinner,
@@ -21,12 +21,14 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { AddCustomerComponent } from './users/add-customer/add-customer.component';
 import { LoaderService } from './services/loader.service';
+import { DialogComponent } from './utils/dialog/dialog.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     UsersComponent,
-    AddCustomerComponent
+    AddCustomerComponent,
+    DialogComponent
   ],
   imports: [
     BrowserModule,
@@ -51,7 +53,8 @@ import { LoaderService } from './services/loader.service';
     ReactiveFormsModule,
     FlexLayoutModule,
     MatDatepickerModule,
-    MatNativeDateModule
+    MatNativeDateModule,
+    MatDialogModule
   ],
   exports: [
     BrowserModule,
@@ -75,9 +78,14 @@ import { LoaderService } from './services/loader.service';
     ReactiveFormsModule,
     FlexLayoutModule,
     MatDatepickerModule,
-    MatNativeDateModule
+    MatNativeDateModule,
+    MatDialogModule
   ],
-  providers: [HttpClient, {provide: MAT_DATE_LOCALE, useValue: 'en-GB'}, LoaderService],
+  entryComponents: [DialogComponent],
+  providers: [HttpClient,
+    {provide: MAT_DATE_LOCALE, useValue: 'en-GB'},
+    {provide: MAT_DIALOG_DEFAULT_OPTIONS, useValue: {hasBackdrop: false}},
+    LoaderService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

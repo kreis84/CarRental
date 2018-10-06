@@ -1,9 +1,11 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { dbService } from '../services/db.service';
-import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
+import { MatDialog, MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 import { FormControl } from '@angular/forms';
 import * as moment from 'moment';
 import { LoaderService } from '../services/loader.service';
+import { DialogComponent } from '../utils/dialog/dialog.component';
+import { BUTTON_TYPE, MSG_TYPES } from '../utils/utils';
 
 @Component({
   selector: 'app-users',
@@ -28,7 +30,8 @@ export class UsersComponent implements OnInit {
   customerToEdit = null;
 
   constructor(private dbApi: dbService,
-              private loaderApi: LoaderService) {
+              private loaderApi: LoaderService,
+              private dialog: MatDialog) {
   }
 
   ngOnInit() {
@@ -76,6 +79,20 @@ export class UsersComponent implements OnInit {
   }
 
   public onRemoveCustomer(customer): void {
+    this.dialog.open(DialogComponent, {width: '250px', data: {type: MSG_TYPES.WARN, buttonType: BUTTON_TYPE.OK_CANCEL, message: 'Are you sure you want to delete customer?'}})
+      .afterClosed().subscribe((response) => {
+        if(response === 'cancel'){
+          return;
+        } else {
+          this.loaderApi.turnOn();
+          this.dbApi.removeCustomer(customer._id).subscribe(() => {
+            this.getUsers();
+          }, (error) => {
+            console.log(error);
+            this.loaderApi.turnOff();
+          });
+        }
+      });
     console.log(customer);
   }
 

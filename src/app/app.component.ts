@@ -12,6 +12,9 @@ export class AppComponent implements OnInit{
 
   constructor(public loaderApi: LoaderService){}
   ngOnInit(){
-    this.loaderApi.status.subscribe((value) => this.showLoader = value);
+    this.loaderApi.status.subscribe((value) => {
+      console.log(value);
+      this.showLoader = value
+    });
   }
 }

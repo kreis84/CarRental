@@ -29,13 +29,12 @@ export class AddCustomerComponent implements OnInit {
     if (this.customer) {
       this.initExsitingCustomer();
     }
-    this.customerGroup.valueChanges.subscribe((val) => console.log(this.customerGroup));
+    // this.customerGroup.valueChanges.subscribe((val) => console.log(this.customerGroup));
   }
 
   public onSaveNewCustomer(): void {
     const customer = this.customerGroup.getRawValue();
     customer.birthDate = moment(customer.birthDate).format('DD.MM.YYYY').toString();
-    console.log(customer.birthDate);
     const service = this.customer
       ? this.dbApi.updateCustomer(customer, this.customer._id)
       : this.dbApi.addNewCustomer(customer);

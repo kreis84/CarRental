@@ -33,4 +33,8 @@ export class dbService {
     return this.http.put(`https://carrental-027b.restdb.io/rest/clients/${id}`, customer, this.httpOptions);
   }
 
+  public removeCustomer(id: string): any{
+    return this.http.delete(`https://carrental-027b.restdb.io/rest/clients/${id}`, this.httpOptions);
+  }
+
 }
