@@ -22,10 +22,12 @@ export class UsersComponent implements OnInit {
   displayedCustomers: Array<any>;
   allCustomers: Array<any>;
 
-  showAddNewCustomer: boolean = false;
   showAllCustomers: boolean = true;
+  showAddNewCustomer: boolean = false;
+  showAddNewRent: boolean = false;
 
   customerToEdit = null;
+  customerForRent = null;
 
   constructor(private dbApi: dbService,
               private loaderApi: LoaderService,
@@ -63,6 +65,9 @@ export class UsersComponent implements OnInit {
   }
 
   public onNewRent(customer): void {
+    this.customerForRent = customer;
+    this.showAllCustomers = false;
+    this.showAddNewRent = true;
   }
 
   public onEditCusomer(customer): void {

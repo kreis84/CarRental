@@ -1,4 +1,6 @@
 <div *ngIf="showAllCars">
+  <h2>Cars</h2>
+  <div class="divider"></div>
   <mat-card>
     <div fxLayout="row" fxLayoutAlign="space-between center">
       <mat-form-field>
@@ -82,6 +84,10 @@
     [pageSizeOptions]="[10, 20, 40]">
   </mat-paginator>
 </div>
+
+<add-rent *ngIf="showAddNewRent"
+          [car]="carForRent">
+</add-rent>
 
 <!--<add-customer *ngIf='showAddNewCustomer'-->
               <!--[customer]="customerToEdit"-->

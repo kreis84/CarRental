@@ -1,4 +1,6 @@
 <div *ngIf="showAllCustomers">
+  <h2>Customers</h2>
+  <div class="divider"></div>
   <mat-card>
     <div fxLayout="row" fxLayoutAlign="space-between center">
       <mat-form-field>
@@ -88,3 +90,6 @@
               (onAddNewCustomerBack)="onAddNewCustomerClose()">
 </add-customer>
 
+<add-rent *ngIf="showAddNewRent"
+          [customer]="customerForRent">
+</add-rent>

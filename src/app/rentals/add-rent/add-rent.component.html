@@ -1,0 +1,52 @@
+<h2>New rent</h2>
+<div class="divider"></div>
+<mat-card [formGroup]="rentGroup">
+  <h3>Customer</h3>
+  <mat-form-field *ngIf="!customer">
+    <mat-select placeholder="Customer" [formControl]="selectedCustomer">
+      <mat-option *ngFor="let customer of customersList" [value]="customer._id">
+        {{customer.name}} {{customer.lastName}} / Pesel: {{customer.pesel}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+    <mat-form-field fxFlex="30%" fxFlexOffset="30px">
+      <input matInput formControlName="customerName" placeholder="Name">
+    </mat-form-field>
+    <mat-form-field fxFlex="30%" fxFlexOffset="30px">
+      <input matInput formControlName="customerLastName" placeholder="Last name">
+    </mat-form-field>
+    <mat-form-field fxFlex="30%" fxFlexOffset="30px">
+      <input matInput formControlName="customerPesel" placeholder="Pesel">
+    </mat-form-field>
+</mat-card>
+<div class="divider"></div>
+<mat-card [formGroup]="rentGroup">
+  <h3>Car</h3>
+  <mat-form-field *ngIf="!car" fxFlex="30%" fxFlexOffset="30px">
+    <mat-select placeholder="Car" [formControl]="selectedCar">
+      <mat-option *ngFor="let car of carsList" [value]="car._id">
+        {{car.mark}} {{car.model}} / Registration: {{car.registration}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+    <mat-form-field fxFlex="30%" fxFlexOffset="30px">
+      <input matInput formControlName="carMark" placeholder="Mark">
+    </mat-form-field>
+    <mat-form-field fxFlex="30%" fxFlexOffset="30px">
+      <input matInput formControlName="carModel" placeholder="Model">
+    </mat-form-field>
+    <mat-form-field fxFlex="30%" fxFlexOffset="30px">
+      <input matInput formControlName="carBasicCost" placeholder="Basic cost">
+    </mat-form-field>
+    <mat-form-field fxFlex="30%" fxFlexOffset="30px">
+      <input matInput formControlName="carRegistration" placeholder="Registration">
+    </mat-form-field>
+</mat-card>
+<div class="divider"></div>
+<mat-card>
+  <h3>Time of rent</h3>
+</mat-card>
+<div class="divider"></div>
+<mat-card>
+  <h3>Summary</h3>
+</mat-card>

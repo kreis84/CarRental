@@ -11,6 +11,10 @@ table{
   cursor: pointer;
 }
 
+h2{
+  color: #b7b7b7;
+}
+
 ::ng-deep .mat-sort-header-container {
   display:flex;
   justify-content:center;
@@ -19,3 +23,5 @@ table{
 .mat-tooltip {
   font-size: 13px !important;
 }
+
+

@@ -8,7 +8,7 @@ import {
   MatButtonModule, MatButtonToggleModule,
   MatCardModule, MatDatepickerModule, MatDialogModule, MatDivider,
   MatDividerModule, MatFormFieldModule, MatGridListModule, MatIconModule, MatInputModule, MatNativeDateModule,
-  MatPaginatorModule, MatProgressSpinnerModule,
+  MatPaginatorModule, MatProgressSpinnerModule, MatSelectModule,
   MatSortModule, MatSpinner,
   MatTableDataSource,
   MatTableModule, MatTooltipModule
@@ -23,6 +23,8 @@ import { AddCustomerComponent } from './users/add-customer/add-customer.componen
 import { LoaderService } from './services/loader.service';
 import { DialogComponent } from './utils/dialog/dialog.component';
 import { CarsComponent } from './cars/cars.component';
+import { AddRentComponent } from './rentals/add-rent/add-rent.component';
+import { RentalsComponent } from './rentals/rentals.component';
 
 @NgModule({
   declarations: [
@@ -30,7 +32,9 @@ import { CarsComponent } from './cars/cars.component';
     UsersComponent,
     AddCustomerComponent,
     DialogComponent,
-    CarsComponent
+    CarsComponent,
+    AddRentComponent,
+    RentalsComponent
   ],
   imports: [
     BrowserModule,
@@ -56,7 +60,8 @@ import { CarsComponent } from './cars/cars.component';
     FlexLayoutModule,
     MatDatepickerModule,
     MatNativeDateModule,
-    MatDialogModule
+    MatDialogModule,
+    MatSelectModule
   ],
   exports: [
     BrowserModule,
@@ -81,7 +86,8 @@ import { CarsComponent } from './cars/cars.component';
     FlexLayoutModule,
     MatDatepickerModule,
     MatNativeDateModule,
-    MatDialogModule
+    MatDialogModule,
+    MatSelectModule
   ],
   entryComponents: [DialogComponent],
   providers: [HttpClient,
@@ -90,4 +96,5 @@ import { CarsComponent } from './cars/cars.component';
     LoaderService],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {
+}

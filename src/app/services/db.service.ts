@@ -21,10 +21,6 @@ export class dbService {
     return this.http.get(`https://carrental-027b.restdb.io/rest/clients`, this.httpOptions);
   }
 
-  public getAllCars(): any {
-    return this.http.get(`https://carrental-027b.restdb.io/rest/cars`, this.httpOptions);
-  }
-
   public addNewCustomer(customer: any): any{
     return this.http.post('https://carrental-027b.restdb.io/rest/clients', customer, this.httpOptions);
   }
@@ -37,8 +33,21 @@ export class dbService {
     return this.http.delete(`https://carrental-027b.restdb.io/rest/clients/${id}`, this.httpOptions);
   }
 
+  public getAllCars(): any {
+    return this.http.get(`https://carrental-027b.restdb.io/rest/cars`, this.httpOptions);
+  }
+
   public removeCar(id: string): any{
     return this.http.delete(`https://carrental-027b.restdb.io/rest/cars/${id}`, this.httpOptions);
   }
+
+  public addNewRent(rent: any): any{
+    return this.http.post('https://carrental-027b.restdb.io/rest/rentals', rent, this.httpOptions);
+  }
+
+  public getAllRentals(): any{
+    return this.http.get(`https://carrental-027b.restdb.io/rest/rentals`, this.httpOptions);
+  }
+
 
 }

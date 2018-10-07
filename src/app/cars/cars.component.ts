@@ -21,7 +21,9 @@ export class CarsComponent implements OnInit {
   displayedCars: Array<any>;
   allCars: Array<any>;
   showAllCars: boolean = true;
-  carToEdit = null;
+  carToEdit: any = null;
+  showAddNewRent: boolean = false;
+  carForRent: any;
 
   constructor(private dbApi: dbService,
               private loaderApi: LoaderService,
@@ -58,7 +60,10 @@ export class CarsComponent implements OnInit {
     this.dataSource.data = filteredCars;
   }
 
-  public onNewRent(customer): void {
+  public onNewRent(car): void {
+    this.carForRent = car;
+    this.showAllCars = false;
+    this.showAddNewRent = true;
   }
 
   public onEditCusomer(car): void {
