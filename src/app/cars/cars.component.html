@@ -1,0 +1,90 @@
+<div *ngIf="showAllCars">
+  <mat-card>
+    <div fxLayout="row" fxLayoutAlign="space-between center">
+      <mat-form-field>
+        <input type="text" matInput placeholder="search" [formControl]="filterInput">
+      </mat-form-field>
+    </div>
+  </mat-card>
+  <mat-divider></mat-divider>
+
+  <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" matSort>
+    <ng-container matColumnDef="mark">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Mark</th>
+      <td mat-cell *matCellDef="let element"> {{element.mark}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="model">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Model</th>
+      <td mat-cell *matCellDef="let element"> {{element.model}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="engine">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Engine</th>
+      <td mat-cell *matCellDef="let element"> {{element.engine}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="base_cost">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Base cost</th>
+      <td mat-cell *matCellDef="let element"> {{element.base_cost}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="color">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Color</th>
+      <td mat-cell *matCellDef="let element"> {{element.color}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="registration">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Registration</th>
+      <td mat-cell *matCellDef="let element"> {{element.registration}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="segment">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Segment</th>
+      <td mat-cell *matCellDef="let element"> {{element.segment}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef> Actions</th>
+      <td mat-cell *matCellDef="let row" id="actionsColumn">
+        <button mat-raised-button color='warn'
+                matTooltipPosition="above"
+                matTooltip="Remove car"
+                (click)="onRemoveCustomer(row)">
+          <i class="fas fa-user-times"></i>
+        </button>
+        <button mat-raised-button color='accent'
+                matTooltipPosition="above"
+                matTooltip="Rent history"
+                (click)="onShowHistory(row)">
+          <i class="fas fa-history"></i>
+        </button>
+        <button mat-raised-button color='accent'
+                matTooltipPosition="above"
+                matTooltip="Edit car data"
+                (click)="onEditCusomer(row)">
+          <i class="far fa-edit"></i>
+        </button>
+        <button mat-raised-button color='accent'
+                matTooltipPosition="above"
+                matTooltip="New rent"
+                (click)="onNewRent(row)">
+          <i class="far fa-calendar-plus"></i>
+        </button>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="selectClientEvent(row)"></tr>
+  </table>
+  <mat-paginator
+    [pageSize]="10"
+    [pageSizeOptions]="[10, 20, 40]">
+  </mat-paginator>
+</div>
+
+<!--<add-customer *ngIf='showAddNewCustomer'-->
+              <!--[customer]="customerToEdit"-->
+              <!--(onAddNewCustomerBack)="onAddNewCustomerClose()">-->
+<!--</add-customer>-->
+

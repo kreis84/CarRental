@@ -2,7 +2,6 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { dbService } from '../services/db.service';
 import { MatDialog, MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 import { FormControl } from '@angular/forms';
-import * as moment from 'moment';
 import { LoaderService } from '../services/loader.service';
 import { DialogComponent } from '../utils/dialog/dialog.component';
 import { BUTTON_TYPE, MSG_TYPES } from '../utils/utils';
@@ -17,7 +16,6 @@ export class UsersComponent implements OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
-  // displayedColumns = ['name', 'lastName', 'pesel', 'birthDate', 'address', 'actions'];
   displayedColumns = ['name', 'lastName', 'phone', 'birthDate', 'pesel', 'address', 'actions'];
   dataSource: MatTableDataSource<any>;
   filterInput = new FormControl('');
@@ -35,7 +33,6 @@ export class UsersComponent implements OnInit {
   }
 
   ngOnInit() {
-    console.log('worka');
     this.getUsers();
     this.filterInput.valueChanges.subscribe(this.filterCustomers.bind(this));
   }
@@ -55,7 +52,6 @@ export class UsersComponent implements OnInit {
   }
 
   public selectClientEvent(client): void {
-    console.log(client);
   }
 
   public filterCustomers(filterString): void {
@@ -67,7 +63,6 @@ export class UsersComponent implements OnInit {
   }
 
   public onNewRent(customer): void {
-    console.log(customer);
   }
 
   public onEditCusomer(customer): void {
@@ -76,11 +71,10 @@ export class UsersComponent implements OnInit {
   }
 
   public onShowHistory(customer): void {
-    console.log(customer);
   }
 
   public onRemoveCustomer(customer): void {
-    this.dialogApi.open(DialogComponent, {width: '250px', data: {type: MSG_TYPES.WARN, buttonType: BUTTON_TYPE.OK_CANCEL, message: 'Are you sure you want to delete customer?'}})
+    this.dialogApi.open(DialogComponent, {data: {type: MSG_TYPES.WARN, buttonType: BUTTON_TYPE.OK_CANCEL, message: 'Are you sure you want to delete customer?'}})
       .afterClosed().subscribe((response) => {
         if(response === 'cancel'){
           return;
@@ -88,14 +82,13 @@ export class UsersComponent implements OnInit {
           this.loaderApi.turnOn();
           this.dbApi.removeCustomer(customer._id).subscribe(() => {
             this.getUsers();
-            this.dialogApi.open(DialogComponent, {width: '250px', data: {type: MSG_TYPES.INFO, buttonType: BUTTON_TYPE.OK, message: 'Customer successfuly removed.'}})
+            this.dialogApi.open(DialogComponent, {data: {type: MSG_TYPES.INFO, buttonType: BUTTON_TYPE.OK, message: 'Customer successfuly removed.'}})
           }, (error) => {
-            console.log(error);
+            this.dialogApi.open(DialogComponent, {data: {type: MSG_TYPES.ERROR, buttonType: BUTTON_TYPE.OK, message: error.message}})
             this.loaderApi.turnOff();
           });
         }
       });
-    console.log(customer);
   }
 
   public onShowAddNewCustomer(): void {

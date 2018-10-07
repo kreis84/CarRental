@@ -48,10 +48,11 @@ export class AddCustomerComponent implements OnInit {
     this.loaderApi.turnOn();
     service.subscribe((res) => {
         this.onAddNewCustomerBack.emit();
-        this.dialogApi.open(DialogComponent, {width: '250px', data: {type: MSG_TYPES.INFO, buttonType: BUTTON_TYPE.OK, message: 'Customer successfuly added.'}});
+        this.dialogApi.open(DialogComponent, {data: {type: MSG_TYPES.INFO, buttonType: BUTTON_TYPE.OK, message: 'Customer successfuly added.'}});
       },
       (error) => {
-        this.dialogApi.open(DialogComponent, {width: '250px', data: {type: MSG_TYPES.ERROR, buttonType: BUTTON_TYPE.OK, message: error.message}});
+        this.dialogApi.open(DialogComponent, {data: {type: MSG_TYPES.ERROR, buttonType: BUTTON_TYPE.OK, message: error.message}});
+        this.loaderApi.turnOff();
       });
   }
 
@@ -61,7 +62,6 @@ export class AddCustomerComponent implements OnInit {
     this.customerGroup.get('pesel').patchValue(this.customer.pesel);
     this.customerGroup.get('address').patchValue(this.customer.address);
     this.customerGroup.get('phone').patchValue(this.customer.phone);
-    console.log(this.customer);
     if (this.customer.birthDate) {
       this.customerGroup.get('birthDate').patchValue(new Date(moment(this.customer.birthDate, 'DD.MM.YYYY').toString()));
     } else {

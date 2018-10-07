@@ -22,13 +22,15 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { AddCustomerComponent } from './users/add-customer/add-customer.component';
 import { LoaderService } from './services/loader.service';
 import { DialogComponent } from './utils/dialog/dialog.component';
+import { CarsComponent } from './cars/cars.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     UsersComponent,
     AddCustomerComponent,
-    DialogComponent
+    DialogComponent,
+    CarsComponent
   ],
   imports: [
     BrowserModule,
