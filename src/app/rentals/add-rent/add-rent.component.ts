@@ -1,5 +1,5 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { combineLatest } from 'rxjs/index';
 import { dbService } from '../../services/db.service';
 import { BUTTON_TYPE, MSG_TYPES } from '../../utils/utils';
@@ -16,6 +16,8 @@ import * as moment from 'moment';
 export class AddRentComponent implements OnInit {
   @Input() customer: any = null;
   @Input() car: any = null;
+
+  @Output() onCloseEvent = new EventEmitter();
 
   customersList: Array<any>;
   carsList: Array<any>;
@@ -103,6 +105,9 @@ export class AddRentComponent implements OnInit {
         startDate.setHours(startHour.split(':')[0]);
         endDate.setHours(endHour.split(':')[0]);
         if (moment(endDate).isBefore(moment(startDate))) {
+          this.rentGroup.get('hoursSpan').patchValue('');
+          this.rentGroup.get('timeSpan').patchValue('');
+          this.rentGroup.get('summaryCost').patchValue('');
           this.dialogApi.open(DialogComponent, {
             data: {
               type: MSG_TYPES.WARN, buttonType: BUTTON_TYPE.OK,
@@ -159,5 +164,22 @@ export class AddRentComponent implements OnInit {
     this.rentGroup.get('customerName').disable();
     this.rentGroup.get('customerLastName').disable();
     this.rentGroup.get('customerPesel').disable();
+    this.rentGroup.get('timeSpan').disable();
+    this.rentGroup.get('hoursSpan').disable();
+    this.rentGroup.get('summaryCost').disable();
+  }
+
+  public onSaveNewRent(): void {
+
+  }
+
+  public onCancel(): void {
+    this.onCloseEvent.emit();
+  }
+
+  public checkIfSaveEnabled(): boolean {
+    return this.rentGroup.get('customerPesel').value !== ''
+      && this.rentGroup.get('carRegistration').value !== ''
+      && this.rentGroup.get('summaryCost').value !== '';
   }
 }

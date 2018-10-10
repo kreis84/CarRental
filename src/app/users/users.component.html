@@ -91,5 +91,6 @@
 </add-customer>
 
 <add-rent *ngIf="showAddNewRent"
+          (onCloseEvent)="onAddNewRentClose()"
           [customer]="customerForRent">
 </add-rent>

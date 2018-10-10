@@ -90,4 +90,10 @@ export class CarsComponent implements OnInit {
       }
     });
   }
+
+  public onCloseNewRent(): void {
+    this.showAddNewRent = false;
+    this.showAllCars = true;
+    this.ngOnInit();
+  }
 }

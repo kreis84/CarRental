@@ -86,6 +86,7 @@
 </div>
 
 <add-rent *ngIf="showAddNewRent"
+          (onCloseEvent)="onCloseNewRent()"
           [car]="carForRent">
 </add-rent>
 

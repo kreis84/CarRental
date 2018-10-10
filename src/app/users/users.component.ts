@@ -107,4 +107,10 @@ export class UsersComponent implements OnInit {
     this.ngOnInit();
     this.customerToEdit = null;
   }
+
+  public onAddNewRentClose(): void {
+    this.showAddNewRent = false;
+    this.showAllCustomers = true;
+    this.ngOnInit();
+  }
 }

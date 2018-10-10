@@ -105,6 +105,27 @@
     <input matInput formControlName="hoursSpan" placeholder="Hours of rent">
   </mat-form-field>
   <mat-form-field fxFlex="10%" fxFlexOffset="30px">
-    <input matInput formControlName="summaryCost" placeholder="Summary cost">
+    <input required matInput formControlName="summaryCost" placeholder="Summary cost">
   </mat-form-field>
+</mat-card>
+<mat-card fxLayout="row" fxLayoutAlign="end">
+  <button mat-raised-button
+          color="accent"
+          matTooltipPosition="above"
+          (click)="onCancel()"
+          matTooltip="Cancel">
+    <i class="fas fa-backspace"></i>
+    &nbsp;&nbsp;Cancel
+  </button>
+
+  <button fxFlexOffset="20px"
+          mat-raised-button
+          color="warn"
+          matTooltipPosition="above"
+          [disabled]="!rentGroup.valid || !checkIfSaveEnabled()"
+          (click)="onSaveNewRent()"
+          matTooltip="Save new rent">
+    <i class="far fa-save"></i>
+    &nbsp;&nbsp; Save new rent
+  </button>
 </mat-card>
