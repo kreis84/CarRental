@@ -48,6 +48,4 @@ export class dbService {
   public getAllRentals(): any{
     return this.http.get(`https://carrental-027b.restdb.io/rest/rentals`, this.httpOptions);
   }
-
-
 }

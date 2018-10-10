@@ -170,7 +170,31 @@ export class AddRentComponent implements OnInit {
   }
 
   public onSaveNewRent(): void {
-
+    let carId, customerId;
+    if(this.car){
+      carId = this.car._id;
+      customerId = this.selectedCustomer.value;
+    } else {
+      customerId = this.customer._id;
+      carId = this.selectedCar.value;
+    }
+    const newRent = {
+      car_id: carId,
+      customer_id: customerId,
+      start_date: moment(this.rentGroup.get('startDate').value).format('DD.MM.YYYY'),
+      start_hour: this.rentGroup.get('startHour').value,
+      end_date: moment(this.rentGroup.get('endDate').value).format('DD.MM.YYYY'),
+      end_hour: this.rentGroup.get('endHour').value,
+      cost: this.rentGroup.get('summaryCost').value
+    };
+    this.loader.turnOn();
+    this.dbApi.addNewRent(newRent).subscribe(() => {
+      this.onCancel();
+    }, (error) => {
+      this.dialogApi.open(DialogComponent, {data: {type: MSG_TYPES.ERROR, buttonType: BUTTON_TYPE.OK, message: error.message}});
+      this.loader.turnOff();
+    });
+    console.log(newRent);
   }
 
   public onCancel(): void {
