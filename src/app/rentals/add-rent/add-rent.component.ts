@@ -101,7 +101,6 @@ export class AddRentComponent implements OnInit {
       this.rentGroup.get('endDate').valueChanges,
       this.rentGroup.get('endHour').valueChanges)
       .subscribe(([startDate, startHour, endDate, endHour]) => {
-        // console.log(response);
         startDate.setHours(startHour.split(':')[0]);
         endDate.setHours(endHour.split(':')[0]);
         if (moment(endDate).isBefore(moment(startDate))) {
@@ -194,7 +193,6 @@ export class AddRentComponent implements OnInit {
       this.dialogApi.open(DialogComponent, {data: {type: MSG_TYPES.ERROR, buttonType: BUTTON_TYPE.OK, message: error.message}});
       this.loader.turnOff();
     });
-    console.log(newRent);
   }
 
   public onCancel(): void {

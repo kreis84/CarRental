@@ -1,0 +1,24 @@
+<h2>History</h2>
+<div class="divider"></div>
+<mat-card [formGroup]="histGroup">
+  <div fxFlex="row">
+    <mat-form-field *ngIf="customersList">
+      <mat-select placeholder="Select history for customer"
+                  formControlName="selectedCustomer">
+        <mat-option></mat-option>
+        <mat-option *ngFor="let customer of customersList" [value]="customer._id">
+          {{customer.name}} {{customer.lastName}} / Pesel: {{customer.pesel}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field *ngIf="carsList" fxFlexOffset="30px">
+      <mat-select placeholder="Select history for car"
+                  formControlName="selectedCar">
+        <mat-option *ngFor="let car of carsList" [value]="car._id">
+          {{car.mark}} {{car.model}} / Registration: {{car.registration}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+  <div>{{selectedHistoryList | json}}</div>
+</mat-card>

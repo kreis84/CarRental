@@ -25,6 +25,7 @@ import { DialogComponent } from './utils/dialog/dialog.component';
 import { CarsComponent } from './cars/cars.component';
 import { AddRentComponent } from './rentals/add-rent/add-rent.component';
 import { RentalsComponent } from './rentals/rentals.component';
+import { HistoryComponent } from './history/history.component';
 
 @NgModule({
   declarations: [
@@ -34,7 +35,8 @@ import { RentalsComponent } from './rentals/rentals.component';
     DialogComponent,
     CarsComponent,
     AddRentComponent,
-    RentalsComponent
+    RentalsComponent,
+    HistoryComponent
   ],
   imports: [
     BrowserModule,

@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
 import { BUTTON_TYPE, MSG_TYPES } from '../utils/utils';
 import { DialogComponent } from '../utils/dialog/dialog.component';
 import { MatDialog, MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
@@ -14,6 +14,9 @@ import { FormControl } from '@angular/forms';
 export class CarsComponent implements OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
+
+  @Output() selectCarForHistory = new EventEmitter();
+  @Output() changeMainTab = new EventEmitter();
 
   displayedColumns = ['mark', 'model', 'engine', 'base_cost', 'color', 'segment', 'registration', 'actions'];
   dataSource: MatTableDataSource<any>;
@@ -70,7 +73,9 @@ export class CarsComponent implements OnInit {
     this.carToEdit = car;
   }
 
-  public onShowHistory(customer): void {
+  public onShowHistory(car): void {
+    this.selectCarForHistory.emit(car);
+    this.changeMainTab.emit(2);
   }
 
   public onRemoveCustomer(car): void {

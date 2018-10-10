@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
 import { dbService } from '../services/db.service';
 import { MatDialog, MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 import { FormControl } from '@angular/forms';
@@ -15,6 +15,9 @@ export class UsersComponent implements OnInit {
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
+
+  @Output() changeMainTab = new EventEmitter();
+  @Output() selectCustomerForHistory = new EventEmitter();
 
   displayedColumns = ['name', 'lastName', 'phone', 'birthDate', 'pesel', 'address', 'actions'];
   dataSource: MatTableDataSource<any>;
@@ -76,6 +79,8 @@ export class UsersComponent implements OnInit {
   }
 
   public onShowHistory(customer): void {
+    this.selectCustomerForHistory.emit(customer);
+    this.changeMainTab.emit(2);
   }
 
   public onRemoveCustomer(customer): void {
