@@ -2,11 +2,11 @@ import { Component, Input, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { combineLatest } from 'rxjs/index';
 import { dbService } from '../../services/db.service';
-import { clearResolutionOfComponentResourcesQueue } from '@angular/core/src/metadata/resource_loading';
 import { BUTTON_TYPE, MSG_TYPES } from '../../utils/utils';
 import { DialogComponent } from '../../utils/dialog/dialog.component';
 import { MatDialog } from '@angular/material';
 import { LoaderService } from '../../services/loader.service';
+import * as moment from 'moment';
 
 @Component({
   selector: 'add-rent',
@@ -22,6 +22,8 @@ export class AddRentComponent implements OnInit {
   selectedCar = new FormControl('');
   selectedCustomer = new FormControl('');
 
+  hours: Array<string> = [];
+
   rentGroup: FormGroup = new FormGroup({
     customerName: new FormControl(''),
     customerLastName: new FormControl(''),
@@ -36,7 +38,10 @@ export class AddRentComponent implements OnInit {
     startHour: new FormControl(''),
     endDate: new FormControl(''),
     endHour: new FormControl(''),
-    cost: new FormControl('')
+    cost: new FormControl(''),
+    timeSpan: new FormControl(''),
+    hoursSpan: new FormControl(''),
+    summaryCost: new FormControl('')
   });
 
   constructor(private dbApi: dbService,
@@ -46,31 +51,87 @@ export class AddRentComponent implements OnInit {
 
   ngOnInit() {
     this.loader.turnOn();
+    this.generateHours();
     this.fieldsDisable();
-    combineLatest(this.dbApi.getAllClients(), this.dbApi.getAllCars())
-      .subscribe(([customers, cars]) => {
-        this.customersList = customers;
-        this.carsList = cars.sort((a, b) => a.mark.localeCompare(b.mark));
-        this.loader.turnOff();
-      }, (error) => {
-        this.loader.turnOff();
-        this.dialogApi.open(DialogComponent, {data: {type: MSG_TYPES.ERROR, buttonType: BUTTON_TYPE.OK, message: error.message}});
-      });
-    if (this.customer) {
-      this.fillCustomer();
-    }
-    if (this.car) {
-      this.fillCar();
-    }
 
+    const service = this.car
+      ? this.dbApi.getAllClients()
+      : this.dbApi.getAllCars();
+
+    service.subscribe((response) => {
+      this.car
+        ? this.customersList = response.sort((a, b) => a.lastName.localeCompare(b.lastName))
+        : this.carsList = response.sort((a, b) => a.mark.localeCompare(b.mark));
+      this.loader.turnOff();
+    }, (error) => {
+      this.loader.turnOff();
+      this.dialogApi.open(DialogComponent, {data: {type: MSG_TYPES.ERROR, buttonType: BUTTON_TYPE.OK, message: error.message}});
+    });
+
+    this.car
+      ? this.fillCar()
+      : this.fillCustomer();
+
+    this.setSubscribers();
+  }
+
+  public generateHours(): void {
+    for (let i = 0; i < 24; i++) {
+      const hour = i < 10 ? `0${i}:00` : `${i}:00`;
+      this.hours.push(hour);
+    }
+  }
+
+  public setSubscribers(): void {
     this.selectedCar.valueChanges.subscribe((selectedCarId) => {
       const selectedCar = this.carsList.find((car) => car._id === selectedCarId);
       this.fillCar(selectedCar);
+      this.countSummaryCost();
     });
+
     this.selectedCustomer.valueChanges.subscribe((selectedCustomerId) => {
       const selectedCustomer = this.customersList.find((customer) => customer._id === selectedCustomerId);
       this.fillCustomer(selectedCustomer);
     });
+
+    combineLatest(this.rentGroup.get('startDate').valueChanges,
+      this.rentGroup.get('startHour').valueChanges,
+      this.rentGroup.get('endDate').valueChanges,
+      this.rentGroup.get('endHour').valueChanges)
+      .subscribe(([startDate, startHour, endDate, endHour]) => {
+        // console.log(response);
+        startDate.setHours(startHour.split(':')[0]);
+        endDate.setHours(endHour.split(':')[0]);
+        if (moment(endDate).isBefore(moment(startDate))) {
+          this.dialogApi.open(DialogComponent, {
+            data: {
+              type: MSG_TYPES.WARN, buttonType: BUTTON_TYPE.OK,
+              message: 'End date can\'t be before start date.'
+            }
+          });
+        } else {
+          this.countTimeSpan(startDate, endDate);
+          this.countSummaryCost();
+        }
+      });
+  }
+
+  public countTimeSpan(startDate, endDate): void {
+    const timeSpan = moment(endDate).diff(moment(startDate));
+    const hours = timeSpan / (3600 * 1000);
+    const daysAndHours = `${(hours - (hours % 24)) / 24} days, ${hours % 24} hours`;
+    this.rentGroup.get('hoursSpan').patchValue(hours);
+    this.rentGroup.get('timeSpan').patchValue(daysAndHours);
+  }
+
+  public countSummaryCost(): void {
+    const carBasicCost = this.rentGroup.get('carBasicCost').value;
+    const hoursSpan = this.rentGroup.get('hoursSpan').value;
+    if (carBasicCost !== '' && hoursSpan !== '') {
+      const hourCost = +carBasicCost / 24;
+      const summaryCost = hourCost * +hoursSpan;
+      this.rentGroup.get('summaryCost').patchValue(summaryCost.toFixed(2));
+    }
   }
 
   public fillCar(selectedCar?: any): void {
@@ -79,7 +140,7 @@ export class AddRentComponent implements OnInit {
     this.rentGroup.get('carModel').patchValue(car.model);
     this.rentGroup.get('carMark').patchValue(car.mark);
     this.rentGroup.get('carRegistration').patchValue(car.registration);
-    this.rentGroup.get('carBasicCost').patchValue(car.base_cost);
+    this.rentGroup.get('carBasicCost').patchValue((+car.base_cost).toFixed(2));
   }
 
   public fillCustomer(selectedCustomer?: any): void {

@@ -3,50 +3,108 @@
 <mat-card [formGroup]="rentGroup">
   <h3>Customer</h3>
   <mat-form-field *ngIf="!customer">
-    <mat-select placeholder="Customer" [formControl]="selectedCustomer">
+    <mat-select placeholder="Select customer"
+                [formControl]="selectedCustomer"
+                reqired>
       <mat-option *ngFor="let customer of customersList" [value]="customer._id">
         {{customer.name}} {{customer.lastName}} / Pesel: {{customer.pesel}}
       </mat-option>
     </mat-select>
   </mat-form-field>
-    <mat-form-field fxFlex="30%" fxFlexOffset="30px">
-      <input matInput formControlName="customerName" placeholder="Name">
-    </mat-form-field>
-    <mat-form-field fxFlex="30%" fxFlexOffset="30px">
-      <input matInput formControlName="customerLastName" placeholder="Last name">
-    </mat-form-field>
-    <mat-form-field fxFlex="30%" fxFlexOffset="30px">
-      <input matInput formControlName="customerPesel" placeholder="Pesel">
-    </mat-form-field>
+  <mat-form-field fxFlex="30%" fxFlexOffset="30px">
+    <input matInput formControlName="customerName" placeholder="Name">
+  </mat-form-field>
+  <mat-form-field fxFlex="30%" fxFlexOffset="30px">
+    <input matInput formControlName="customerLastName" placeholder="Last name">
+  </mat-form-field>
+  <mat-form-field fxFlex="30%" fxFlexOffset="30px">
+    <input matInput formControlName="customerPesel" placeholder="Pesel">
+  </mat-form-field>
 </mat-card>
 <div class="divider"></div>
 <mat-card [formGroup]="rentGroup">
   <h3>Car</h3>
   <mat-form-field *ngIf="!car" fxFlex="30%" fxFlexOffset="30px">
-    <mat-select placeholder="Car" [formControl]="selectedCar">
+    <mat-select placeholder="Select car"
+                [formControl]="selectedCar"
+                required>
       <mat-option *ngFor="let car of carsList" [value]="car._id">
         {{car.mark}} {{car.model}} / Registration: {{car.registration}}
       </mat-option>
     </mat-select>
   </mat-form-field>
-    <mat-form-field fxFlex="30%" fxFlexOffset="30px">
-      <input matInput formControlName="carMark" placeholder="Mark">
-    </mat-form-field>
-    <mat-form-field fxFlex="30%" fxFlexOffset="30px">
-      <input matInput formControlName="carModel" placeholder="Model">
-    </mat-form-field>
-    <mat-form-field fxFlex="30%" fxFlexOffset="30px">
-      <input matInput formControlName="carBasicCost" placeholder="Basic cost">
-    </mat-form-field>
-    <mat-form-field fxFlex="30%" fxFlexOffset="30px">
-      <input matInput formControlName="carRegistration" placeholder="Registration">
-    </mat-form-field>
+  <mat-form-field fxFlex="30%" fxFlexOffset="30px">
+    <input matInput formControlName="carMark" placeholder="Mark">
+  </mat-form-field>
+  <mat-form-field fxFlex="30%" fxFlexOffset="30px">
+    <input matInput formControlName="carModel" placeholder="Model">
+  </mat-form-field>
+  <mat-form-field fxFlex="30%" fxFlexOffset="30px">
+    <input matInput formControlName="carBasicCost" placeholder="Basic cost">
+  </mat-form-field>
+  <mat-form-field fxFlex="30%" fxFlexOffset="30px">
+    <input matInput formControlName="carRegistration" placeholder="Registration">
+  </mat-form-field>
 </mat-card>
 <div class="divider"></div>
-<mat-card>
+<mat-card [formGroup]="rentGroup">
   <h3>Time of rent</h3>
+  <mat-form-field fxFlex="20%">
+    <input matInput [matDatepicker]="startPicker"
+           [attr.disabled]="true"
+           required
+           (click)="startPicker.open()"
+           (focus)="startPicker.open()"
+           placeholder="Start date"
+           formControlName="startDate">
+    <mat-datepicker-toggle matSuffix [for]="startPicker"></mat-datepicker-toggle>
+    <mat-datepicker #startPicker></mat-datepicker>
+  </mat-form-field>
+  <mat-form-field fxFlex="10%" fxFlexOffset='20px'>
+    <mat-select placeholder="Start hour"
+                formControlName="startHour"
+                required>
+      <mat-option *ngFor="let hour of hours" [value]="hour">
+        {{hour}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field fxFlex="20%" fxFlexOffset="50px">
+    <input matInput [matDatepicker]="endPicker"
+           [attr.disabled]="true"
+           (click)="endPicker.open()"
+           (focus)="endPicker.open()"
+           placeholder="End date"
+           formControlName="endDate"
+           required>
+    <mat-datepicker-toggle matSuffix [for]="endPicker"></mat-datepicker-toggle>
+    <mat-datepicker #endPicker></mat-datepicker>
+  </mat-form-field>
+  <mat-form-field fxFlex="10%" fxFlexOffset='20px'>
+    <mat-select placeholder="End hour"
+                formControlName="endHour"
+                required>
+      <mat-option *ngFor="let hour of hours" [value]="hour">
+        {{hour}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+
 </mat-card>
 <div class="divider"></div>
-<mat-card>
+<mat-card [formGroup]="rentGroup">
   <h3>Summary</h3>
+  <mat-form-field fxFlex="10%" fxFlexOffset="30px">
+    <input matInput formControlName="carBasicCost" placeholder="Basic cost">
+  </mat-form-field>
+  <mat-form-field fxFlex="15%" fxFlexOffset="30px">
+    <input matInput formControlName="timeSpan" placeholder="Time of rent">
+  </mat-form-field>
+  <mat-form-field fxFlex="10%" fxFlexOffset="30px">
+    <input matInput formControlName="hoursSpan" placeholder="Hours of rent">
+  </mat-form-field>
+  <mat-form-field fxFlex="10%" fxFlexOffset="30px">
+    <input matInput formControlName="summaryCost" placeholder="Summary cost">
+  </mat-form-field>
 </mat-card>
