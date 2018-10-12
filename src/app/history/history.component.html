@@ -2,7 +2,7 @@
 <div class="divider"></div>
 <mat-card [formGroup]="histGroup">
   <div fxFlex="row">
-    <mat-form-field *ngIf="customersList">
+    <mat-form-field *ngIf="customersList" fxFlex="40%">
       <mat-select placeholder="Select history for customer"
                   formControlName="selectedCustomer">
         <mat-option></mat-option>
@@ -11,7 +11,7 @@
         </mat-option>
       </mat-select>
     </mat-form-field>
-    <mat-form-field *ngIf="carsList" fxFlexOffset="30px">
+    <mat-form-field *ngIf="carsList" fxFlex="40%" fxFlexOffset="30px">
       <mat-select placeholder="Select history for car"
                   formControlName="selectedCar">
         <mat-option *ngFor="let car of carsList" [value]="car._id">
@@ -20,5 +20,31 @@
       </mat-select>
     </mat-form-field>
   </div>
-  <div>{{selectedHistoryList | json}}</div>
 </mat-card>
+
+<table mat-table [dataSource]="historyForTable"
+       class="mat-elevation-z8"
+       matSort *ngIf="historyForTable">
+  <ng-container matColumnDef="person">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header> Person</th>
+    <td mat-cell *matCellDef="let element"> {{element.person}}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="car">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header> Car</th>
+    <td mat-cell *matCellDef="let element"> {{element.car}}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="time">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header> Rent time</th>
+    <td mat-cell *matCellDef="let element"> {{element.time}}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="cost">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header> Cost</th>
+    <td mat-cell *matCellDef="let element"> {{element.cost}}</td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+</table>

@@ -26,6 +26,9 @@ export class HistoryComponent implements OnInit {
   customersList: Array<any>;
   rentalsList: Array<any>;
   selectedHistoryList: Array<any>;
+  historyForTable: Array<any>;
+
+  displayedColumns = ['person', 'car', 'time', 'cost'];
 
   constructor(public loader: LoaderService,
               public dialogApi: MatDialog,
@@ -59,16 +62,40 @@ export class HistoryComponent implements OnInit {
         this.loader.turnOff();
         this.dialogApi.open(DialogComponent, {data: {type: MSG_TYPES.ERROR, buttonType: BUTTON_TYPE.OK, message: error.message}});
       });
-
   }
 
   public setSubscribers(): void {
     this.histGroup.get('selectedCar').valueChanges.subscribe((carId) => {
+      if (carId === '') {
+        return;
+      }
       this.selectedHistoryList = this.rentalsList.filter((rent) => rent.car_id === carId);
+      this.histGroup.get('selectedCustomer').patchValue('');
+      this.prepareHistoryForTable();
     });
     this.histGroup.get('selectedCustomer').valueChanges.subscribe((customerId) => {
+      if (customerId === '') {
+        return;
+      }
       this.selectedHistoryList = this.rentalsList.filter((rent) => rent.customer_id === customerId);
+      this.histGroup.get('selectedCar').patchValue('');
+      this.prepareHistoryForTable();
     });
+  }
+
+  public prepareHistoryForTable(): void {
+
+    this.historyForTable = this.selectedHistoryList.map((history) => {
+      const customer = this.customersList.find((customer) => customer._id === history.customer_id);
+      const car = this.carsList.find((car) => car._id === history.car_id);
+      return {
+        person: `${customer.name} ${customer.lastName}`,
+        car: `${car.mark} ${car.model} ${car.engine}`,
+        time: `${history.start_date} - ${history.start_hour}  -  ${history.end_date} / ${history.end_hour}`,
+        cost: history.cost
+      };
+    });
+    console.log(this.historyForTable);
   }
 
   public initByInput(): void {

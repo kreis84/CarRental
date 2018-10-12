@@ -1,12 +1,12 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { combineLatest } from 'rxjs/index';
 import { dbService } from '../../services/db.service';
 import { BUTTON_TYPE, MSG_TYPES } from '../../utils/utils';
 import { DialogComponent } from '../../utils/dialog/dialog.component';
 import { MatDialog } from '@angular/material';
 import { LoaderService } from '../../services/loader.service';
 import * as moment from 'moment';
+import { combineLatest } from 'rxjs/index';
 
 @Component({
   selector: 'add-rent',
@@ -23,7 +23,7 @@ export class AddRentComponent implements OnInit {
   carsList: Array<any>;
   selectedCar = new FormControl('');
   selectedCustomer = new FormControl('');
-
+  rentalsList: Array<any>;
   hours: Array<string> = [];
 
   rentGroup: FormGroup = new FormGroup({
@@ -56,16 +56,14 @@ export class AddRentComponent implements OnInit {
     this.generateHours();
     this.fieldsDisable();
 
-    const service = this.car
-      ? this.dbApi.getAllClients()
-      : this.dbApi.getAllCars();
-
-    service.subscribe((response) => {
-      this.car
-        ? this.customersList = response.sort((a, b) => a.lastName.localeCompare(b.lastName))
-        : this.carsList = response.sort((a, b) => a.mark.localeCompare(b.mark));
+    combineLatest(this.dbApi.getAllCars(), this.dbApi.getAllClients(), this.dbApi.getAllRentals()).subscribe(([cars, customers, rentals]) => {
+      this.rentalsList = rentals;
+      this.customersList = customers.sort((a, b) => a.lastName.localeCompare(b.lastName));
+      this.carsList = cars.sort((a, b) => a.mark.localeCompare(b.mark));
       this.loader.turnOff();
+      console.log('asdfasdf');
     }, (error) => {
+      console.log(error);
       this.loader.turnOff();
       this.dialogApi.open(DialogComponent, {data: {type: MSG_TYPES.ERROR, buttonType: BUTTON_TYPE.OK, message: error.message}});
     });
@@ -169,8 +167,12 @@ export class AddRentComponent implements OnInit {
   }
 
   public onSaveNewRent(): void {
+    if (this.checkIfIsRentAlready()) {
+      return;
+    }
+
     let carId, customerId;
-    if(this.car){
+    if (this.car) {
       carId = this.car._id;
       customerId = this.selectedCustomer.value;
     } else {
@@ -193,6 +195,47 @@ export class AddRentComponent implements OnInit {
       this.dialogApi.open(DialogComponent, {data: {type: MSG_TYPES.ERROR, buttonType: BUTTON_TYPE.OK, message: error.message}});
       this.loader.turnOff();
     });
+  }
+
+  public checkIfIsRentAlready(): boolean {
+    const carId = this.car ? this.car._id : this.selectedCar.value;
+    const actualStartDate = moment(`${moment(this.rentGroup.get('startDate').value).format('DD.MM.YYYY')} ${this.rentGroup.get('startHour').value}`, 'DD.MM.YYYY hh:mm');
+    const actualEndDate = moment(`${moment(this.rentGroup.get('endDate').value).format('DD.MM.YYYY')} ${this.rentGroup.get('endHour').value}`, 'DD.MM.YYYY hh:mm');
+    const datesCustomersList = this.rentalsList.filter((rent) => rent.car_id === carId).map((rental) => {
+      const customer = this.customersList.find((customer) => customer._id === rental.customer_id);
+      return {
+        startDate: moment(`${rental.start_date} ${rental.start_hour}`, 'DD.MM.YYYY hh:mm'),
+        endDate: moment(`${rental.end_date} ${rental.end_hour}`, 'DD.MM.YYYY hh:mm'),
+        person: `${customer.name} ${customer.lastName}`
+      };
+    });
+    let person = '';
+
+    datesCustomersList.forEach((date) => {
+      const e1start = actualStartDate,
+        e1end = actualEndDate,
+        e2start = date.startDate,
+        e2end = date.endDate;
+      console.log(e1start);
+      console.log(e2start);
+      console.log(e1end);
+      console.log(e2end);
+      if (e1start.isAfter(e2start) && e1start.isBefore(e2end) || e2start.isAfter(e1start) && e2start.isBefore(e1end)) {
+        // if (e1start > e2start && e1start < e2end || e2start > e1start && e2start < e1end) {
+        person = `${date.person} (${moment(date.startDate).format('DD.MM.YYYY hh:mm')}  -  ${moment(date.endDate).format('DD.MM.YYYY hh:mm')})`;
+      }
+    });
+    if (person !== '') {
+      this.dialogApi.open(DialogComponent, {
+        data: {
+          type: MSG_TYPES.ERROR, buttonType: BUTTON_TYPE.OK,
+          message: `The car has already been leased at this time for ${person}`
+        }
+      });
+      return true;
+    } else {
+      return false;
+    }
   }
 
   public onCancel(): void {
