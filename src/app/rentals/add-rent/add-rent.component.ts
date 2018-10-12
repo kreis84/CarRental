@@ -190,6 +190,7 @@ export class AddRentComponent implements OnInit {
     };
     this.loader.turnOn();
     this.dbApi.addNewRent(newRent).subscribe(() => {
+      this.dialogApi.open(DialogComponent, {data: {type: MSG_TYPES.INFO, buttonType: BUTTON_TYPE.OK, message: 'Rent successfuly added.'}});
       this.onCancel();
     }, (error) => {
       this.dialogApi.open(DialogComponent, {data: {type: MSG_TYPES.ERROR, buttonType: BUTTON_TYPE.OK, message: error.message}});
@@ -201,25 +202,24 @@ export class AddRentComponent implements OnInit {
     const carId = this.car ? this.car._id : this.selectedCar.value;
     const actualStartDate = moment(`${moment(this.rentGroup.get('startDate').value).format('DD.MM.YYYY')} ${this.rentGroup.get('startHour').value}`, 'DD.MM.YYYY hh:mm');
     const actualEndDate = moment(`${moment(this.rentGroup.get('endDate').value).format('DD.MM.YYYY')} ${this.rentGroup.get('endHour').value}`, 'DD.MM.YYYY hh:mm');
-    let person: any;
-
-    this.rentalsList
+    const colideRental = this.rentalsList
       .filter((rental) => rental.car_id === carId)
-      .forEach((rental) => {
-        const customer = this.customersList.find((customer) => customer._id === rental.customer_id);
+      .find((rental) => {
         const e1start = actualStartDate,
           e1end = actualEndDate,
           e2start = moment(`${rental.start_date} ${rental.start_hour}`, 'DD.MM.YYYY hh:mm'),
           e2end = moment(`${rental.end_date} ${rental.end_hour}`, 'DD.MM.YYYY hh:mm');
-        if (e1start.isAfter(e2start) && e1start.isBefore(e2end) || e2start.isAfter(e1start) && e2start.isBefore(e1end)) {
-          person = `${customer.name} ${customer.lastName} (${moment(e2start).format('DD.MM.YYYY hh:mm')}  -  ${moment(e2end).format('DD.MM.YYYY hh:mm')})`;
-        }
+        return (e1start.isAfter(e2start) && e1start.isBefore(e2end) || e2start.isAfter(e1start) && e2start.isBefore(e1end));
       });
-    if (person) {
+
+    if (colideRental) {
+      const customer = this.customersList.find((customer) => customer._id === colideRental.customer_id);
+      const startDate = moment(`${colideRental.start_date} ${colideRental.start_hour}`, 'DD.MM.YYYY hh:mm').format('DD.MM.YYYY hh.mm');
+      const endDate = moment(`${colideRental.end_date} ${colideRental.end_hour}`, 'DD.MM.YYYY hh:mm').format('DD.MM.YYYY hh.mm');
       this.dialogApi.open(DialogComponent, {
         data: {
           type: MSG_TYPES.ERROR, buttonType: BUTTON_TYPE.OK,
-          message: `The car has already been leased at this time for ${person}`
+          message: `The car has already been leased at this time for ${customer.name} ${customer.lastName} (${startDate}  -  ${endDate})`
         }
       });
       return true;
