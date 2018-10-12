@@ -201,31 +201,21 @@ export class AddRentComponent implements OnInit {
     const carId = this.car ? this.car._id : this.selectedCar.value;
     const actualStartDate = moment(`${moment(this.rentGroup.get('startDate').value).format('DD.MM.YYYY')} ${this.rentGroup.get('startHour').value}`, 'DD.MM.YYYY hh:mm');
     const actualEndDate = moment(`${moment(this.rentGroup.get('endDate').value).format('DD.MM.YYYY')} ${this.rentGroup.get('endHour').value}`, 'DD.MM.YYYY hh:mm');
-    const datesCustomersList = this.rentalsList.filter((rent) => rent.car_id === carId).map((rental) => {
-      const customer = this.customersList.find((customer) => customer._id === rental.customer_id);
-      return {
-        startDate: moment(`${rental.start_date} ${rental.start_hour}`, 'DD.MM.YYYY hh:mm'),
-        endDate: moment(`${rental.end_date} ${rental.end_hour}`, 'DD.MM.YYYY hh:mm'),
-        person: `${customer.name} ${customer.lastName}`
-      };
-    });
-    let person = '';
+    let person: any;
 
-    datesCustomersList.forEach((date) => {
-      const e1start = actualStartDate,
-        e1end = actualEndDate,
-        e2start = date.startDate,
-        e2end = date.endDate;
-      console.log(e1start);
-      console.log(e2start);
-      console.log(e1end);
-      console.log(e2end);
-      if (e1start.isAfter(e2start) && e1start.isBefore(e2end) || e2start.isAfter(e1start) && e2start.isBefore(e1end)) {
-        // if (e1start > e2start && e1start < e2end || e2start > e1start && e2start < e1end) {
-        person = `${date.person} (${moment(date.startDate).format('DD.MM.YYYY hh:mm')}  -  ${moment(date.endDate).format('DD.MM.YYYY hh:mm')})`;
-      }
-    });
-    if (person !== '') {
+    this.rentalsList
+      .filter((rental) => rental.car_id === carId)
+      .forEach((rental) => {
+        const customer = this.customersList.find((customer) => customer._id === rental.customer_id);
+        const e1start = actualStartDate,
+          e1end = actualEndDate,
+          e2start = moment(`${rental.start_date} ${rental.start_hour}`, 'DD.MM.YYYY hh:mm'),
+          e2end = moment(`${rental.end_date} ${rental.end_hour}`, 'DD.MM.YYYY hh:mm');
+        if (e1start.isAfter(e2start) && e1start.isBefore(e2end) || e2start.isAfter(e1start) && e2start.isBefore(e1end)) {
+          person = `${customer.name} ${customer.lastName} (${moment(e2start).format('DD.MM.YYYY hh:mm')}  -  ${moment(e2end).format('DD.MM.YYYY hh:mm')})`;
+        }
+      });
+    if (person) {
       this.dialogApi.open(DialogComponent, {
         data: {
           type: MSG_TYPES.ERROR, buttonType: BUTTON_TYPE.OK,
@@ -233,9 +223,8 @@ export class AddRentComponent implements OnInit {
         }
       });
       return true;
-    } else {
-      return false;
     }
+    return false;
   }
 
   public onCancel(): void {
