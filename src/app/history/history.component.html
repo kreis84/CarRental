@@ -24,24 +24,24 @@
 
 <table mat-table [dataSource]="historyForTable"
        class="mat-elevation-z8"
-       matSort *ngIf="historyForTable">
+       *ngIf="historyForTable">
   <ng-container matColumnDef="person">
-    <th mat-header-cell *matHeaderCellDef mat-sort-header> Person</th>
+    <th mat-header-cell *matHeaderCellDef> Person</th>
     <td mat-cell *matCellDef="let element"> {{element.person}}</td>
   </ng-container>
 
   <ng-container matColumnDef="car">
-    <th mat-header-cell *matHeaderCellDef mat-sort-header> Car</th>
+    <th mat-header-cell *matHeaderCellDef> Car</th>
     <td mat-cell *matCellDef="let element"> {{element.car}}</td>
   </ng-container>
 
   <ng-container matColumnDef="time">
-    <th mat-header-cell *matHeaderCellDef mat-sort-header> Rent time</th>
+    <th mat-header-cell *matHeaderCellDef> Rent time</th>
     <td mat-cell *matCellDef="let element"> {{element.time}}</td>
   </ng-container>
 
   <ng-container matColumnDef="cost">
-    <th mat-header-cell *matHeaderCellDef mat-sort-header> Cost</th>
+    <th mat-header-cell *matHeaderCellDef> Cost</th>
     <td mat-cell *matCellDef="let element"> {{element.cost}}</td>
   </ng-container>
 

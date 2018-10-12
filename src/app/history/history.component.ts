@@ -84,7 +84,6 @@ export class HistoryComponent implements OnInit {
   }
 
   public prepareHistoryForTable(): void {
-
     this.historyForTable = this.selectedHistoryList.map((history) => {
       const customer = this.customersList.find((customer) => customer._id === history.customer_id);
       const car = this.carsList.find((car) => car._id === history.car_id);
@@ -95,7 +94,6 @@ export class HistoryComponent implements OnInit {
         cost: history.cost
       };
     });
-    console.log(this.historyForTable);
   }
 
   public initByInput(): void {

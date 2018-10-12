@@ -61,9 +61,7 @@ export class AddRentComponent implements OnInit {
       this.customersList = customers.sort((a, b) => a.lastName.localeCompare(b.lastName));
       this.carsList = cars.sort((a, b) => a.mark.localeCompare(b.mark));
       this.loader.turnOff();
-      console.log('asdfasdf');
     }, (error) => {
-      console.log(error);
       this.loader.turnOff();
       this.dialogApi.open(DialogComponent, {data: {type: MSG_TYPES.ERROR, buttonType: BUTTON_TYPE.OK, message: error.message}});
     });
