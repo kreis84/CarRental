@@ -24,8 +24,13 @@
     </div>
     <div class="daysWrapper">
       <span class="emptyDay" *ngFor='let day of loopHelper(month.emptyDays)'></span>
-      <span class="day" *ngFor='let day of loopHelper(month.days)' (click)='onDayClick(day, month.month, month.year)'>{{day}}
+      <span class="day" *ngFor='let day of loopHelper(month.days)' 
+[ngClass] = "{'selectedDay': checkIfDaySelected(day, month.month, month.year)}"
+
+              (click)='onDayClick(day, month.month, month.year)'>{{day}}
       </span>
     </div>
   </div>
 </div>
+
+<!-- [ngClass] = "{'selectedDay': checkIfDaySelected(day, month.month, month.year)}" -->

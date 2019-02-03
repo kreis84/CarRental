@@ -1,5 +1,6 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import * as moment from 'moment';
+import { iRange } from './calendar.component.utils';
 
 @Component({
   selector: 'app-calendar',
@@ -9,11 +10,12 @@ import * as moment from 'moment';
 export class CalendarComponent implements OnInit {
   @Input() startDate: {year: number, month: number};
   @Input() monthsQuantity: number = 5;
+
+  @Output() rangeChangeEvent = new EventEmitter<iRange>();
   
-  // months: {days: number[]} = {days: []};
   months: Array<{emptyDays: number, days: number, year: number, month: number}>;
   showCalendar: boolean = false;
-
+  range: iRange = {} as iRange;
   constructor() { }
 
   ngOnInit() {
@@ -42,7 +44,36 @@ export class CalendarComponent implements OnInit {
   }
 
   public onDayClick(dayNumber, monthNumber, year): void {
-    console.log(dayNumber + ' ' + monthNumber + ' ' + year);
+    // if(JSON.stringify(this.range.start) === JSON.stringify({day: dayNumber, month: monthNumber, year: year})){
+    //   this.range.start = null;
+    //   return;
+    // }
+    // if(JSON.stringify(this.range.end) === JSON.stringify({day: dayNumber, month: monthNumber, year: year})){
+    //   this.range.end = null;
+    //   return;
+    // }
+    if(!this.range || !this.range.start){
+      this.range.start = {day: dayNumber, month: monthNumber, year: year};
+    } else {
+      this.range.end = {day: dayNumber, month: monthNumber, year: year};
+    }
+    if(this.range.start && this.range.end){
+      const start = moment([this.range.start.day, this.range.start.month, this.range.start.year], 'DD-MM-YYYY');
+      const end = moment([this.range.end.day, this.range.end.month, this.range.end.year], 'DD-MM-YYYY');
+      if(start.isAfter(end)){
+        const tempEnd = this.range.end;
+        this.range.end = this.range.start;
+        this.range.start = tempEnd;
+      }
+    }
+
+    if(this.range.start && this.range.end){
+      console.log(this.range.start);
+      console.log(this.range.end);
+
+      this.prepareCalendarObject(this.startDate);
+      this.rangeChangeEvent.emit(this.range);
+    }
   }
 
   public changeMonth(forward: boolean = true): void {
@@ -57,7 +88,6 @@ export class CalendarComponent implements OnInit {
       this.startDate.year--;
       this.startDate.month = 12;
     }
-    
     this.prepareCalendarObject(this.startDate);
   }
 
@@ -67,5 +97,19 @@ export class CalendarComponent implements OnInit {
       arr.push(i);
     }
     return arr;
+  }
+
+  public checkIfDaySelected(day: number, month: number, year: number): boolean {
+    if(this.range.start && this.range.end){
+      const checkDay = moment([day, month, year], 'DD-MM-YYYY');
+      const start = moment([this.range.start.day, this.range.start.month, this.range.start.year], 'DD-MM-YYYY');
+      const end = moment([this.range.end.day, this.range.end.month, this.range.end.year], 'DD-MM-YYYY');
+      if(checkDay.isBetween(start,end,'day') || checkDay.isSame(start) || checkDay.isSame(end)){
+        return true;
+      }
+    } else {
+      // TODO showing when only start or end is selected (propably should by always start when only one day is selected)
+    }
+    return false;
   }
 }
