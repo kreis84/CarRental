@@ -14,8 +14,12 @@ export class AppComponent implements OnInit {
   selectedIndex = 0;
   selectedCar: any = null;
   selectedCustomer: any = null;
+  startMonthForCalendar: {year: number, month: number};
 
   constructor(public loaderApi: LoaderService) {
+    const today = new Date();
+    // this.startMonthForCalendar = {year: today.getFullYear(), month: today.getMonth()+1};
+    this.startMonthForCalendar = {year: today.getFullYear(), month: 12};
   }
 
   ngOnInit() {

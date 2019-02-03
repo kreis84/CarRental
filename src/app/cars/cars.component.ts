@@ -34,7 +34,7 @@ export class CarsComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.getCars();
+    // this.getCars();
     this.filterInput.valueChanges.subscribe(this.filterCars.bind(this));
   }
 

@@ -1,0 +1,31 @@
+<div id='calendarWrapper' *ngIf='showCalendar'>
+  <div class="sterringWraper">
+      <button class='sterButton' (click)='changeMonth(false)'> 
+          <i class="fas fa-arrow-left"></i>
+      </button>
+      <button class='sterButton' (click)='changeMonth()'> 
+          <i class="fas fa-arrow-right"></i>
+      </button>
+  </div>
+  <div class="monthWrapper" *ngFor='let month of months'>
+    <div class="header">
+      <span>{{month.name}}</span>
+      <span>{{month.year}}</span>
+    </div>
+    <hr />
+    <div class=daysNames>
+      <span>Mon</span>
+      <span>Tue</span>
+      <span>Wed</span>
+      <span>Thu</span>
+      <span>Fri</span>
+      <span>Sat</span>
+      <span>Sun</span>
+    </div>
+    <div class="daysWrapper">
+      <span class="emptyDay" *ngFor='let day of loopHelper(month.emptyDays)'></span>
+      <span class="day" *ngFor='let day of loopHelper(month.days)' (click)='onDayClick(day, month.month, month.year)'>{{day}}
+      </span>
+    </div>
+  </div>
+</div>

@@ -26,6 +26,7 @@ import { CarsComponent } from './cars/cars.component';
 import { AddRentComponent } from './rentals/add-rent/add-rent.component';
 import { RentalsComponent } from './rentals/rentals.component';
 import { HistoryComponent } from './history/history.component';
+import { CalendarComponent } from './calendar/calendar/calendar.component';
 
 @NgModule({
   declarations: [
@@ -36,7 +37,8 @@ import { HistoryComponent } from './history/history.component';
     CarsComponent,
     AddRentComponent,
     RentalsComponent,
-    HistoryComponent
+    HistoryComponent,
+    CalendarComponent
   ],
   imports: [
     BrowserModule,

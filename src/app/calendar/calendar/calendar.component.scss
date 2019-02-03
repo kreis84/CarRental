@@ -1,0 +1,77 @@
+#calendarWrapper{
+    display: flex;
+    flex-wrap: wrap;
+
+    .sterringWraper{
+        width: 30px;
+        display: flex;
+        flex-wrap: wrap;
+
+        .sterButton{
+            margin: 5px 0;
+            background-color: #424242;
+            border: 1px solid grey;
+            border-radius: 5px;
+            color: white;
+
+            &:hover{
+                cursor: pointer;
+                background-color: black;
+            }
+        }
+    }
+
+    .monthWrapper{
+        width: 181px;
+        border: 1px solid grey;
+        border-radius: 5px;
+        padding: 5px;
+        margin: 5px;
+
+        .header{
+            display: flex;
+            justify-content: space-between;    
+        }
+
+        .daysNames{
+            width: 182px;
+            display: flex;
+            font-size: 10px;
+            justify-content: space-around;
+            span{
+                width: 20px;
+            }
+        }
+
+        .daysWrapper{
+            display: flex;
+            width: 182px;
+            overflow: hidden;
+            flex-wrap: wrap;
+
+            .emptyDay{
+                border-radius: 4px;
+                border: 1px solid grey;
+                margin: 2px;
+                width: 20px;
+            }
+        
+            .day{
+                border-radius: 4px;
+                border: 1px solid grey;
+                margin: 2px;
+                color: #dfdfdf;
+                width: 20px;
+                font-size: 12px;
+                text-align: center;
+                cursor: pointer;
+        
+                &:hover {
+                    background-color: black;
+                    color: white;
+                }
+            }
+        
+        }
+    }
+}
