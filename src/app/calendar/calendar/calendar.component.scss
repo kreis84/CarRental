@@ -55,10 +55,19 @@
                 width: 20px;
             }
 
+            .selectedDayFirstLast{
+                background-color: #e3d8d8 !important;
+                color: #3f3f3f !important;
+            }
+
             .selectedDay{
                 background-color: grey;
             }
         
+            .actualDay{
+                border-color: white !important;
+            }
+
             .day{
                 border-radius: 4px;
                 border: 1px solid grey;
