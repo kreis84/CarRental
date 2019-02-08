@@ -62,7 +62,7 @@
     </mat-form-field>
   </div>
 
-  <app-calendar [monthsQuantity]='5' (rangeChangeEvent)='rentDateChange($event)'>
+  <app-calendar [monthsQuantity]='5' (rangeChangeEvent)='rentDateChange($event)' [reservedDatesRanges]='rentalsRangesList'>
 
   </app-calendar>
 </mat-card>

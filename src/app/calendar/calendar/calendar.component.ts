@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import * as moment from 'moment';
 import { iRange } from './calendar.component.utils';
+import { BehaviorSubject } from 'rxjs';
 
 @Component({
   selector: 'app-calendar',
@@ -10,6 +11,7 @@ import { iRange } from './calendar.component.utils';
 export class CalendarComponent implements OnInit {
   @Input() startDate: {year: number, month: number};
   @Input() monthsQuantity: number = 10;
+  @Input() reservedDatesRanges: BehaviorSubject<iRange[]> = new BehaviorSubject([]);
 
   @Output() rangeChangeEvent = new EventEmitter<iRange>();
   
@@ -130,6 +132,19 @@ export class CalendarComponent implements OnInit {
       return true;
     }
     return false;
+  }
 
+  public chekIfUnabailable(day: number, month: number, year: number): boolean {
+    const checkDay = moment([day, month, year], 'DD-MM-YYYY');
+    const includesList = this.reservedDatesRanges.value.map((range: iRange) => {
+      const start = moment([range.start.day, range.start.month, range.start.year], 'DD-MM-YYYY');
+      const end = moment([range.end.day, range.end.month, range.end.year], 'DD-MM-YYYY');
+      if (checkDay.isBetween(start, end,'day') || checkDay.isSame(start) || checkDay.isSame(end)){
+        return true;
+      } else {
+        return false;
+      }
+    });
+    return includesList.some(item => item);
   }
 }

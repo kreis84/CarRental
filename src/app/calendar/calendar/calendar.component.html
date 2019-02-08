@@ -27,7 +27,8 @@
       <span class="day" *ngFor='let day of loopHelper(month.days)' 
               [ngClass] = "{'selectedDay': checkIfDaySelected(day, month.month, month.year), 
                             'selectedDayFirstLast': checkIfFirstOrLast(day, month.month, month.year),
-                            'actualDay': checkIfActual(day, month.month, month.year)}"
+                            'actualDay': checkIfActual(day, month.month, month.year),
+                            'unavailableDay': chekIfUnabailable(day, month.month, month.year)}"
               (click)='onDayClick(day, month.month, month.year)'>{{day}}
       </span>
     </div>

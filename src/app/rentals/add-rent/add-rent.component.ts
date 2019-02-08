@@ -6,8 +6,9 @@ import { DialogComponent } from '../../utils/dialog/dialog.component';
 import { MatDialog } from '@angular/material';
 import { LoaderService } from '../../services/loader.service';
 import * as moment from 'moment';
-import { combineLatest } from 'rxjs/index';
+import { combineLatest, BehaviorSubject } from 'rxjs/index';
 import { iRange } from '../../calendar/calendar/calendar.component.utils';
+import { DYNAMIC_TYPE } from '@angular/compiler/src/output/output_ast';
 
 @Component({
   selector: 'add-rent',
@@ -25,6 +26,7 @@ export class AddRentComponent implements OnInit {
   selectedCar = new FormControl('');
   selectedCustomer = new FormControl('');
   rentalsList: Array<any>;
+  rentalsRangesList: BehaviorSubject<iRange[]> = new BehaviorSubject([]);
   hours: Array<string> = [];
 
   rentGroup: FormGroup = new FormGroup({
@@ -48,8 +50,8 @@ export class AddRentComponent implements OnInit {
   });
 
   constructor(private dbApi: dbService,
-              private loader: LoaderService,
-              private dialogApi: MatDialog) {
+    private loader: LoaderService,
+    private dialogApi: MatDialog) {
   }
 
   ngOnInit() {
@@ -62,16 +64,29 @@ export class AddRentComponent implements OnInit {
       this.customersList = customers.sort((a, b) => a.lastName.localeCompare(b.lastName));
       this.carsList = cars.sort((a, b) => a.mark.localeCompare(b.mark));
       this.loader.turnOff();
+      this.setSubscribers();
+      this.car
+        ? this.fillCar()
+        : this.fillCustomer();
     }, (error) => {
       this.loader.turnOff();
-      this.dialogApi.open(DialogComponent, {data: {type: MSG_TYPES.ERROR, buttonType: BUTTON_TYPE.OK, message: error.message}});
+      this.dialogApi.open(DialogComponent, { data: { type: MSG_TYPES.ERROR, buttonType: BUTTON_TYPE.OK, message: error.message } });
     });
+  }
 
-    this.car
-      ? this.fillCar()
-      : this.fillCustomer();
-
-    this.setSubscribers();
+  public fillCalendarReservedDates(carId): void {
+    const rangeList = this.rentalsList
+      .filter((rent) => rent.car_id === carId)
+      .map((rental) => {
+      const start = rental.start_date.split('.');
+      const end = rental.end_date.split('.');
+      const range: iRange = {
+        start: {day: start[0], month: start[1], year: start[2]},
+        end: {day: end[0], month: end[1], year: end[2]}
+      }
+      return range;
+    });
+    this.rentalsRangesList.next(rangeList);
   }
 
   public generateHours(): void {
@@ -86,6 +101,7 @@ export class AddRentComponent implements OnInit {
       const selectedCar = this.carsList.find((car) => car._id === selectedCarId);
       this.fillCar(selectedCar);
       this.countSummaryCost();
+      this.fillCalendarReservedDates(selectedCarId);
     });
 
     this.selectedCustomer.valueChanges.subscribe((selectedCustomerId) => {
@@ -98,7 +114,6 @@ export class AddRentComponent implements OnInit {
       this.rentGroup.get('endDate').valueChanges,
       this.rentGroup.get('endHour').valueChanges)
       .subscribe(([startDate, startHour, endDate, endHour]) => {
-        console.log(startDate);
         startDate.setHours(startHour.split(':')[0]);
         endDate.setHours(endHour.split(':')[0]);
         if (moment(endDate).isBefore(moment(startDate))) {
@@ -119,8 +134,8 @@ export class AddRentComponent implements OnInit {
   }
 
   public rentDateChange(dateRange: iRange): void {
-    const startDateString = new Date(dateRange.start.year,dateRange.start.month,dateRange.start.day);
-    const endDateString = new Date(dateRange.end.year,dateRange.end.month,dateRange.end.day);
+    const startDateString = new Date(dateRange.start.year, dateRange.start.month-1, dateRange.start.day);
+    const endDateString = new Date(dateRange.end.year, dateRange.end.month-1, dateRange.end.day);
     this.rentGroup.get('startDate').patchValue(startDateString);
     this.rentGroup.get('endDate').patchValue(endDateString);
   }
@@ -197,10 +212,10 @@ export class AddRentComponent implements OnInit {
     };
     this.loader.turnOn();
     this.dbApi.addNewRent(newRent).subscribe(() => {
-      this.dialogApi.open(DialogComponent, {data: {type: MSG_TYPES.INFO, buttonType: BUTTON_TYPE.OK, message: 'Rent successfuly added.'}});
+      this.dialogApi.open(DialogComponent, { data: { type: MSG_TYPES.INFO, buttonType: BUTTON_TYPE.OK, message: 'Rent successfuly added.' } });
       this.onCancel();
     }, (error) => {
-      this.dialogApi.open(DialogComponent, {data: {type: MSG_TYPES.ERROR, buttonType: BUTTON_TYPE.OK, message: error.message}});
+      this.dialogApi.open(DialogComponent, { data: { type: MSG_TYPES.ERROR, buttonType: BUTTON_TYPE.OK, message: error.message } });
       this.loader.turnOff();
     });
   }
