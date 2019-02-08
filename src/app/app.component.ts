@@ -18,8 +18,8 @@ export class AppComponent implements OnInit {
 
   constructor(public loaderApi: LoaderService) {
     const today = new Date();
-    // this.startMonthForCalendar = {year: today.getFullYear(), month: today.getMonth()+1};
-    this.startMonthForCalendar = {year: today.getFullYear(), month: 12};
+    // // this.startMonthForCalendar = {year: today.getFullYear(), month: today.getMonth()+1};
+    // this.startMonthForCalendar = {year: today.getFullYear(), month: 12};
   }
 
   ngOnInit() {

@@ -4,14 +4,11 @@
 </div>
 <div id="browserWindow" fxLayout="row">
   <div id="mainWindow">
-    <h1 style="color: #c9c9e0">
+    <div id='title'>
       CAR RENTAL
-    </h1>
+    </div>
     <mat-card>
       <mat-tab-group mat-stretch-tabs [(selectedIndex)]="selectedIndex" (selectedTabChange)="selectedTabChanged($event.index)">
-        <mat-tab label="Calendar">
-            <app-calendar [startDate]='startMonthForCalendar'></app-calendar>
-        </mat-tab>
         <mat-tab label="Customers">
           <app-users (changeMainTab)="onTabChangeFromChild($event)" (selectCustomerForHistory)="onSelectCustomerForHistory($event)"></app-users>
         </mat-tab>

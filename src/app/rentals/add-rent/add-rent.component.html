@@ -3,9 +3,7 @@
 <mat-card [formGroup]="rentGroup">
   <h3>Customer</h3>
   <mat-form-field *ngIf="!customer">
-    <mat-select placeholder="Select customer"
-                [formControl]="selectedCustomer"
-                reqired>
+    <mat-select placeholder="Select customer" [formControl]="selectedCustomer" reqired>
       <mat-option *ngFor="let customer of customersList" [value]="customer._id">
         {{customer.name}} {{customer.lastName}} / Pesel: {{customer.pesel}}
       </mat-option>
@@ -25,9 +23,7 @@
 <mat-card [formGroup]="rentGroup">
   <h3>Car</h3>
   <mat-form-field *ngIf="!car" fxFlex="30%" fxFlexOffset="30px">
-    <mat-select placeholder="Select car"
-                [formControl]="selectedCar"
-                required>
+    <mat-select placeholder="Select car" [formControl]="selectedCar" required>
       <mat-option *ngFor="let car of carsList" [value]="car._id">
         {{car.mark}} {{car.model}} / Registration: {{car.registration}}
       </mat-option>
@@ -49,48 +45,26 @@
 <div class="divider"></div>
 <mat-card [formGroup]="rentGroup">
   <h3>Time of rent</h3>
-  <mat-form-field fxFlex="20%">
-    <input matInput [matDatepicker]="startPicker"
-           [attr.disabled]="true"
-           required
-           (click)="startPicker.open()"
-           (focus)="startPicker.open()"
-           placeholder="Start date"
-           formControlName="startDate">
-    <mat-datepicker-toggle matSuffix [for]="startPicker"></mat-datepicker-toggle>
-    <mat-datepicker #startPicker></mat-datepicker>
-  </mat-form-field>
-  <mat-form-field fxFlex="10%" fxFlexOffset='20px'>
-    <mat-select placeholder="Start hour"
-                formControlName="startHour"
-                required>
-      <mat-option *ngFor="let hour of hours" [value]="hour">
-        {{hour}}
-      </mat-option>
-    </mat-select>
-  </mat-form-field>
+  <div fxLayout="row">
+    <mat-form-field fxFlex="10%" fxFlexOffset='20px'>
+      <mat-select placeholder="Start hour" formControlName="startHour" required>
+        <mat-option *ngFor="let hour of hours" [value]="hour">
+          {{hour}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field fxFlex="10%" fxFlexOffset='20px'>
+      <mat-select placeholder="End hour" formControlName="endHour" required>
+        <mat-option *ngFor="let hour of hours" [value]="hour">
+          {{hour}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
 
-  <mat-form-field fxFlex="20%" fxFlexOffset="50px">
-    <input matInput [matDatepicker]="endPicker"
-           [attr.disabled]="true"
-           (click)="endPicker.open()"
-           (focus)="endPicker.open()"
-           placeholder="End date"
-           formControlName="endDate"
-           required>
-    <mat-datepicker-toggle matSuffix [for]="endPicker"></mat-datepicker-toggle>
-    <mat-datepicker #endPicker></mat-datepicker>
-  </mat-form-field>
-  <mat-form-field fxFlex="10%" fxFlexOffset='20px'>
-    <mat-select placeholder="End hour"
-                formControlName="endHour"
-                required>
-      <mat-option *ngFor="let hour of hours" [value]="hour">
-        {{hour}}
-      </mat-option>
-    </mat-select>
-  </mat-form-field>
+  <app-calendar [monthsQuantity]='5' (rangeChangeEvent)='rentDateChange($event)'>
 
+  </app-calendar>
 </mat-card>
 <div class="divider"></div>
 <mat-card [formGroup]="rentGroup">
@@ -109,22 +83,13 @@
   </mat-form-field>
 </mat-card>
 <mat-card fxLayout="row" fxLayoutAlign="end">
-  <button mat-raised-button
-          color="accent"
-          matTooltipPosition="above"
-          (click)="onCancel()"
-          matTooltip="Cancel">
+  <button mat-raised-button color="accent" matTooltipPosition="above" (click)="onCancel()" matTooltip="Cancel">
     <i class="fas fa-backspace"></i>
     &nbsp;&nbsp;Cancel
   </button>
 
-  <button fxFlexOffset="20px"
-          mat-raised-button
-          color="warn"
-          matTooltipPosition="above"
-          [disabled]="!rentGroup.valid || !checkIfSaveEnabled()"
-          (click)="onSaveNewRent()"
-          matTooltip="Save new rent">
+  <button fxFlexOffset="20px" mat-raised-button color="warn" matTooltipPosition="above" [disabled]="!rentGroup.valid || !checkIfSaveEnabled()"
+    (click)="onSaveNewRent()" matTooltip="Save new rent">
     <i class="far fa-save"></i>
     &nbsp;&nbsp; Save new rent
   </button>

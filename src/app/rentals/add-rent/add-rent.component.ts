@@ -7,6 +7,7 @@ import { MatDialog } from '@angular/material';
 import { LoaderService } from '../../services/loader.service';
 import * as moment from 'moment';
 import { combineLatest } from 'rxjs/index';
+import { iRange } from '../../calendar/calendar/calendar.component.utils';
 
 @Component({
   selector: 'add-rent',
@@ -97,6 +98,7 @@ export class AddRentComponent implements OnInit {
       this.rentGroup.get('endDate').valueChanges,
       this.rentGroup.get('endHour').valueChanges)
       .subscribe(([startDate, startHour, endDate, endHour]) => {
+        console.log(startDate);
         startDate.setHours(startHour.split(':')[0]);
         endDate.setHours(endHour.split(':')[0]);
         if (moment(endDate).isBefore(moment(startDate))) {
@@ -114,6 +116,13 @@ export class AddRentComponent implements OnInit {
           this.countSummaryCost();
         }
       });
+  }
+
+  public rentDateChange(dateRange: iRange): void {
+    const startDateString = new Date(dateRange.start.year,dateRange.start.month,dateRange.start.day);
+    const endDateString = new Date(dateRange.end.year,dateRange.end.month,dateRange.end.day);
+    this.rentGroup.get('startDate').patchValue(startDateString);
+    this.rentGroup.get('endDate').patchValue(endDateString);
   }
 
   public countTimeSpan(startDate, endDate): void {

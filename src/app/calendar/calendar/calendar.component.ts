@@ -9,7 +9,7 @@ import { iRange } from './calendar.component.utils';
 })
 export class CalendarComponent implements OnInit {
   @Input() startDate: {year: number, month: number};
-  @Input() monthsQuantity: number = 5;
+  @Input() monthsQuantity: number = 10;
 
   @Output() rangeChangeEvent = new EventEmitter<iRange>();
   
@@ -19,6 +19,10 @@ export class CalendarComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
+    if(!this.startDate){
+      const today = new Date();
+      this.startDate = {year: today.getFullYear(), month: today.getMonth()+1};
+    }
     this.prepareCalendarObject();
   }
 
