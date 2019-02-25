@@ -234,20 +234,23 @@ export class AddRentComponent implements OnInit {
         return (e1start.isAfter(e2start) && e1start.isBefore(e2end) || e2start.isAfter(e1start) && e2start.isBefore(e1end));
       });
 
-    if (colideRental) {
-      const customer = this.customersList.find((customer) => customer._id === colideRental.customer_id);
-      const startDate = moment(`${colideRental.start_date} ${colideRental.start_hour}`, 'DD.MM.YYYY hh:mm').format('DD.MM.YYYY hh.mm');
-      const endDate = moment(`${colideRental.end_date} ${colideRental.end_hour}`, 'DD.MM.YYYY hh:mm').format('DD.MM.YYYY hh.mm');
-      this.dialogApi.open(DialogComponent, {
-        data: {
-          type: MSG_TYPES.ERROR, buttonType: BUTTON_TYPE.OK,
-          message: `The car has already been leased at this time for ${customer.name} ${customer.lastName} (${startDate}  -  ${endDate})`
-        }
-      });
-      return true;
+      if (colideRental) {
+        const customer = this.customersList.find((customer) => customer._id === colideRental.customer_id);
+        const startDate = moment(`${colideRental.start_date} ${colideRental.start_hour}`, 'DD.MM.YYYY hh:mm').format('DD.MM.YYYY hh.mm');
+        const endDate = moment(`${colideRental.end_date} ${colideRental.end_hour}`, 'DD.MM.YYYY hh:mm').format('DD.MM.YYYY hh.mm');
+        const message = customer 
+          ? `The car has already been leased at this time for ${customer.name} ${customer.lastName} (${startDate}  -  ${endDate})`
+          : `The car has already been leased at this time for customer which isn't in database any more. (${startDate}  -  ${endDate})`
+        this.dialogApi.open(DialogComponent, {
+          data: {
+            type: MSG_TYPES.ERROR, buttonType: BUTTON_TYPE.OK,
+            message: message
+          }
+        });
+        return true;
+      }
+      return false;
     }
-    return false;
-  }
 
   public onCancel(): void {
     this.onCloseEvent.emit();

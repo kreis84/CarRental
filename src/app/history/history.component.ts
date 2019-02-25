@@ -88,7 +88,7 @@ export class HistoryComponent implements OnInit {
       const customer = this.customersList.find((customer) => customer._id === history.customer_id);
       const car = this.carsList.find((car) => car._id === history.car_id);
       return {
-        person: `${customer.name} ${customer.lastName}`,
+        person: customer ? `${customer.name} ${customer.lastName}` : 'CUSTOMER REMOVED FROM DATABASE',
         car: `${car.mark} ${car.model} ${car.engine}`,
         time: `${history.start_date} - ${history.start_hour}  -  ${history.end_date} / ${history.end_hour}`,
         cost: history.cost

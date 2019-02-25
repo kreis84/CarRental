@@ -35,7 +35,6 @@ export class AddCustomerComponent implements OnInit {
     if (this.customer) {
       this.initExsitingCustomer();
     }
-    // this.customerGroup.valueChanges.subscribe((val) => console.log(this.customerGroup));
   }
 
   public onSaveNewCustomer(): void {
